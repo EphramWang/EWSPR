@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest package="android.serialport.reader"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name="android.serialport.reader.Application"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="android.serialport.reader.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="android.serialport.reader.PrefActivity"></activity>
+        <activity android:name="android.serialport.reader.test.MainMenu"></activity>
+        <activity android:name="android.serialport.reader.test.SerialPortPreferences"></activity>
+        <activity android:name="android.serialport.reader.test.ConsoleActivity"></activity>
+        <activity android:name="android.serialport.reader.test.LoopbackActivity"></activity>
+        <activity android:name="android.serialport.reader.test.Sending01010101Activity"></activity>
+        <activity android:name="com.yanzhenjie.andserver.server.WebActivity"/>
+
+
+        <service
+            android:name="com.yanzhenjie.andserver.server.CoreService"
+            android:exported="false"/>
+    </application>
+
+</manifest>
