@@ -11,6 +11,7 @@ import android.serialport.reader.utils.Utils;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by ning on 17/8/31.
@@ -130,9 +131,8 @@ public class ViewBarChart extends View {
     }
 
     private void drawBars(Canvas canvas) {
-        ArrayList<DataPackage> dataPackageArrayList = new ArrayList<>();
+        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataPackages4display;
         DataPackage dataPackage;
-        ((MainActivity)context).dataPackageLinkedBlockingQueue.drainTo(dataPackageArrayList);
         if (dataPackageArrayList.size() < 1 && cacheDatapackage == null)
             return;
         else if (dataPackageArrayList.size() < 1)

@@ -11,6 +11,7 @@ import android.serialport.reader.utils.Utils;
 import android.view.View;
 
 import java.util.LinkedList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by ning on 17/8/31.
@@ -72,7 +73,7 @@ public class ViewFrequencyChart extends View {
     private void drawChart(Canvas canvas) {
         //ArrayList<DataPackage> dataPackageArrayList = new ArrayList<>();
         //((MainActivity)context).dataPackageLinkedBlockingQueue.drainTo(dataPackageArrayList);
-        LinkedList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataList;
+        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataPackages4display;
 
         DataPackage rx2Pack = null;
         DataPackage rx3Pack = null;

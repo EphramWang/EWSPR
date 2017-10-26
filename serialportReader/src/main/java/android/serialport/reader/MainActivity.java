@@ -44,6 +44,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -96,9 +97,10 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     public static boolean isCheckSum = false;//是否校验
     public static String filePath = "/datapack";//数据包保存的路径
     public static String screenshotPath = "/datapackScreenShot";//截图文件存放文件夹的路径
+    public static int maxDisplayLength = 500;
 
     //数据
-    public LinkedList<DataPackage> dataList = new LinkedList<>();
+    public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存
 
     public LinkedBlockingQueue<ReceivedData> receivedDataLinkedBlockingQueue = new LinkedBlockingQueue<>();//读取到的串口数据缓冲区
     public LinkedBlockingQueue<DataPackage> dataPackageLinkedBlockingQueue = new LinkedBlockingQueue<>();//读取到的数据
@@ -544,7 +546,10 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 && dataPackage.dataBytes[1] == DataConstants.command_receive_data) {
                             //校验合格的数据包
                             dataPackageLinkedBlockingQueue.put(dataPackage);//数据包保存到队列
-                            dataList.push(dataPackage);
+                            if (dataPackages4display.size() > maxDisplayLength + 1) {
+                                dataPackages4display.remove(0);
+                            }
+                            dataPackages4display.add(dataPackage);
                             Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
                         }
                     }
