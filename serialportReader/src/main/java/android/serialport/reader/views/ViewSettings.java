@@ -1,7 +1,9 @@
 package android.serialport.reader.views;
 
 import android.content.Context;
+import android.serialport.reader.MainActivity;
 import android.serialport.reader.R;
+import android.serialport.reader.utils.DataConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -46,12 +48,37 @@ public class ViewSettings extends LinearLayout implements View.OnClickListener{
                 break;
             case R.id.button_top:
                 //power+
+                String currentPower = tvBottomLeft.getText().toString();
+
+                if (currentPower.equals("")) {
+                    tvBottomLeft.setText(MainActivity.mPower + 1 + "");
+                } else {
+                    int p = Integer.parseInt(currentPower) + 1;
+                    if (p > 10)
+                        p = 10;
+                    tvBottomLeft.setText(p + "");
+                }
                 break;
             case R.id.button_bottom:
                 //power-
+                String currentPower2 = tvBottomLeft.getText().toString();
+
+                if (currentPower2.equals("")) {
+                    tvBottomLeft.setText(MainActivity.mPower + 1 + "");
+                } else {
+                    int p = Integer.parseInt(currentPower2) - 1;
+                    if (p < 1)
+                        p = 1;
+                    tvBottomLeft.setText(p + "");
+                }
                 break;
             case R.id.button_center:
                 //set power
+                String currentPower3 = tvBottomLeft.getText().toString();
+                if (currentPower3.length() > 0) {
+                    byte content = (byte) Integer.parseInt(currentPower3);
+                    ((MainActivity)getContext()).sendBytes(DataConstants.getControlCommandBytes(DataConstants.command_send_power, content));
+                }
                 break;
         }
 

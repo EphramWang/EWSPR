@@ -25,7 +25,8 @@
             android:scaleType="centerInside"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/shut_down" />
+            android:src="@drawable/shut_down"
+            android:visibility="gone"/>
 
         <ImageView
             android:id="@+id/button_audio"
@@ -34,13 +35,16 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:scaleType="centerInside"
-            android:src="@drawable/music" />
+            android:src="@drawable/music"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
         <ImageView
             android:id="@+id/button_center"
@@ -73,7 +77,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
         <ImageView
             android:id="@+id/button_bottom"

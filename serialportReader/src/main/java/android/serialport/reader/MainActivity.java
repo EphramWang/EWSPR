@@ -193,7 +193,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     }
 
-    private void sendBytes(byte[] bytes) {
+    public void sendBytes(byte[] bytes) {
         Log.e("www", "sendBytes " + bytes + " bytes.length" + bytes.length);
         try {
             if (mOutputStream != null) {
@@ -209,7 +209,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         llBarChartView = new ViewBarChart(this);
         llTimeChartView = new ViewTimeChart(this);
         llFreqChartView = new ViewFrequencyChart(this);
-        llSettingsView = new ViewSettings(getBaseContext());
+        llSettingsView = new ViewSettings(this);
     }
 
     private void refreshView(int viewType) {
@@ -302,7 +302,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                 refreshView(VIEW_TYPE_HOME);
                 break;
             case R.id.bottom_button_right:
-                if (currentViewType == VIEW_TYPE_HOME || currentViewType == VIEW_TYPE_HOME)
+                if (currentViewType == VIEW_TYPE_HOME || currentViewType == VIEW_TYPE_SETTINGS)
                     startActivity(new Intent(MainActivity.this, PrefActivity.class));
                 else
                     ;
