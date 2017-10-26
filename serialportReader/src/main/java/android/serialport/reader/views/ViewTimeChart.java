@@ -114,7 +114,7 @@ public class ViewTimeChart extends View {
         //draw bar
         float margin = Utils.dp2px(13);
         paint.setColor(Color.GREEN);
-        canvas.drawRoundRect(new RectF(barRect.left + margin, barRect.top + barRect.height() * (1 - data1) + margin, barRect.right - margin, barRect.bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
+        canvas.drawRoundRect(new RectF(barRect.left + margin, barRect.top + (barRect.height() - margin * 2) * (1 - data1) + margin, barRect.right - margin, barRect.bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
 
         //draw time line
         paint.setStyle(Paint.Style.STROKE);

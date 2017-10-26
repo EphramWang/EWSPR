@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.serialport.reader.model.DataPackage;
 import android.serialport.reader.MainActivity;
 import android.serialport.reader.utils.Utils;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.LinkedList;
@@ -21,7 +22,7 @@ public class ViewFrequencyChart extends View {
 
     public static final int X_AXIS_COUNT = 128;
 
-    private int selection = MainActivity.WORK_MODE_ONLY_RX2;
+    private int selection = 65;
 
     Context context;
 
@@ -59,6 +60,21 @@ public class ViewFrequencyChart extends View {
         chartRect1 = new RectF(mainRect.left + mainRect.width() / 5, xAxisRect.bottom, mainRect.right, xAxisRect.bottom + everyHeight - 3);
         legendRect2 = new RectF(mainRect.left, legendRect1.bottom, mainRect.left + mainRect.width() / 5, legendRect1.bottom + everyHeight);
         chartRect2 = new RectF(mainRect.left + mainRect.width() / 5, chartRect1.bottom + 3, mainRect.right, chartRect1.bottom + everyHeight);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int rawX = (int) event.getX();
+        int rawY = (int) event.getY();
+        if (chartRect1.contains(rawX, rawY) || chartRect2.contains(rawX, rawY)) {
+            selection = (int) ((rawX + 1 - chartRect1.left) * 128f / chartRect1.width());
+        }
+        if (selection < 1)
+            selection = 1;
+        if (selection > 128)
+            selection = 128;
+        postInvalidate();
+        return true;
     }
 
     @Override
@@ -135,13 +151,20 @@ public class ViewFrequencyChart extends View {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.RIGHT);
         paint.setTextSize(Utils.dp2px(22));
-        canvas.drawText("900 MHz", topRect.right - Utils.dp2px(10), topRect.bottom - Utils.dp2px(10), paint);
+        float selectFreq = (selection - 65) * 0.5f;
+        String add = selectFreq >= 0 ? "+" : "-";
+        canvas.drawText(add + selectFreq + "KHz", topRect.right - Utils.dp2px(10), topRect.bottom - Utils.dp2px(10), paint);
 
         paint.setTextSize(Utils.dp2px(11));
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText("-32KHz", xAxisRect.left, xAxisRect.bottom - Utils.dp2px(10), paint);
         paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText("+32KHz", xAxisRect.right, xAxisRect.bottom - Utils.dp2px(10), paint);
+
+        //draw vertical line for selection
+        paint.setColor(Color.BLUE);
+        float selectX = chartRect1.left + chartRect1.width() * selection / X_AXIS_COUNT;
+        canvas.drawLine(selectX, chartRect1.top, selectX, chartRect2.bottom, paint);
 
         //legends
         float margin = Utils.dp2px(5);
