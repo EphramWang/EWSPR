@@ -56,8 +56,8 @@ public class ViewBarChart extends View {
     private void computeRect() {
         float everyWidth = mainRect.width() / 7;
 
-        float topMargin = mainRect.height() / 7;
-        float bottomMargin = mainRect.height() / 7;
+        float topMargin = mainRect.height() / 8;
+        float bottomMargin = mainRect.height() / 6;
 
         bar1Rect = new RectF(everyWidth, mainRect.top + topMargin, everyWidth * 2, mainRect.bottom - bottomMargin);
         bar2Rect = new RectF(everyWidth * 3, mainRect.top + topMargin, everyWidth * 4, mainRect.bottom - bottomMargin);
@@ -127,6 +127,27 @@ public class ViewBarChart extends View {
             if (i % 2 == 0)
                 canvas.drawText((100 - 5 * i) + "", textX, y + Utils.dp2px(5), paint);
         }
+
+        //draw bar legend
+        float legendTop = bar1Rect.bottom + mainRect.height() / 20;
+        float legendBottom = mainRect.bottom - mainRect.height() / 20;
+
+        RectF legend1Rect = new RectF(bar1Rect.left, legendTop, bar1Rect.right, legendBottom);
+        RectF legend2Rect = new RectF(bar2Rect.left, legendTop, bar2Rect.right, legendBottom);
+        RectF legend3Rect = new RectF(bar3Rect.left, legendTop, bar3Rect.right, legendBottom);
+        paint.setColor(Color.GREEN);
+        canvas.drawRoundRect(legend1Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
+        paint.setColor(Color.RED);
+        canvas.drawRoundRect(legend2Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
+        paint.setColor(Color.YELLOW);
+        canvas.drawRoundRect(legend3Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
+
+        paint.setColor(Color.BLACK);
+        paint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextSize(Utils.dp2px(13));
+        canvas.drawText("发射基波", (legend1Rect.left + legend1Rect.right) / 2, (legend1Rect.top + legend1Rect.bottom) / 2 + Utils.dp2px(10), paint);
+        canvas.drawText("2次谐波", (legend2Rect.left + legend2Rect.right) / 2, (legend2Rect.top + legend2Rect.bottom) / 2 + Utils.dp2px(10), paint);
+        canvas.drawText("3次谐波", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(10), paint);
 
     }
 
