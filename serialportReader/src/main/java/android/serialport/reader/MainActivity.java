@@ -97,6 +97,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     public static boolean isCheckSum = false;//是否校验
     public static String filePath = "/datapack";//数据包保存的路径
     public static String screenshotPath = "/datapackScreenShot";//截图文件存放文件夹的路径
+    public static int datapackNumToSaveInFile = 500;
     public static int maxDisplayLength = 500;
 
     //数据
@@ -442,10 +443,20 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     private void saveDataPackagesToStorage(ArrayList<DataPackage> listToBeSaved) {
         Log.e("www", "saveDataPackagesToStorage, length=" + listToBeSaved.size());
         String dirName = Environment.getExternalStorageDirectory() + filePath;
-        String filename =  dirName + "/" + System.currentTimeMillis();
         File dir = new File(dirName);
         if (!dir.exists())
             dir.mkdir();
+
+        Date date = new Date(listToBeSaved.get(0).timestamp);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+        String dateString = formatter.format(date);
+        String subDirName = dateString.substring(0, 16);
+        File subDir = new File(dirName + "/" + subDirName);
+        if (!subDir.exists())
+            subDir.mkdir();
+
+        String filename =  dirName + "/" + subDirName + "/" + dateString + ".dat";
+
         File file = new File(filename);
         if (!file.exists()) {
             try {
@@ -566,14 +577,14 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         @Override
         public void run() {
             while (true) {
-                if (dataPackageLinkedBlockingQueue.size() > 2000) {
+                if (dataPackageLinkedBlockingQueue.size() > datapackNumToSaveInFile * 2) {
                     //保存到外部
-                    ArrayList<DataPackage> listToBeSaved = new ArrayList<>(1000);
-                    dataPackageLinkedBlockingQueue.drainTo(listToBeSaved, 1000);
+                    ArrayList<DataPackage> listToBeSaved = new ArrayList<>(datapackNumToSaveInFile);
+                    dataPackageLinkedBlockingQueue.drainTo(listToBeSaved, datapackNumToSaveInFile);
                     saveDataPackagesToStorage(listToBeSaved);
                 }
                 try {
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

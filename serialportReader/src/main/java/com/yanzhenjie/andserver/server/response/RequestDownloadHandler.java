@@ -39,6 +39,11 @@ public class RequestDownloadHandler implements RequestHandler {
     @Override
     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
         Map<String, String> params = HttpRequestParser.parse(request);
+        String dir = params.get("dir");
+        String subDirName = "";
+        if (dir!= null && dir.length() > 0) {
+            subDirName = "/" + dir;
+        }
 
         String sStart = "<!DOCTYPE html>\n" +
                 "<html>\n" +
@@ -62,7 +67,7 @@ public class RequestDownloadHandler implements RequestHandler {
 //                "</html>"
                 ;
 
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + MainActivity.filePath);
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + MainActivity.filePath + subDirName);
         if (file.exists() && file.isDirectory()) {
             String[] filelist = file.list();
             for (int i = 0; i < filelist.length; i++) {
@@ -72,6 +77,8 @@ public class RequestDownloadHandler implements RequestHandler {
                     System.out.println("absolutepath=" + readfile.getAbsolutePath());
                     System.out.println("name=" + readfile.getName());
                     sStart += "<a href=\"/download?filename=" + readfile.getName() + "\">" + readfile.getName() + "</a> <br/>\n";
+                } else {
+                    sStart += "<a href=\"/files?dir=" + readfile.getName() + "\">" + readfile.getName() + "</a> <br/>\n";
                 }
             }
         }
