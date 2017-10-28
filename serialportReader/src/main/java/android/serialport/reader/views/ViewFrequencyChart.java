@@ -178,7 +178,17 @@ public class ViewFrequencyChart extends View {
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Utils.dp2px(13));
+        if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
         canvas.drawText("2次谐波", (newLegendRect1.left + newLegendRect1.right) / 2, (newLegendRect1.top + newLegendRect1.bottom) / 2 + Utils.dp2px(10), paint);
+        if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
         canvas.drawText("3次谐波", (newLegendRect2.left + newLegendRect2.right) / 2, (newLegendRect2.top + newLegendRect2.bottom) / 2 + Utils.dp2px(10), paint);
     }
 }

@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+
+    <color name="colorRX1">#00FF00</color>
+    <color name="colorRX1_invalid">#4400FF00</color>
+    <color name="colorRX2">#FF0000</color>
+    <color name="colorRX2_invalid">#44FF0000</color>
+    <color name="colorRX3">#FFFF00</color>
+    <color name="colorRX3_invalid">#44FFFF00</color>
 </resources>

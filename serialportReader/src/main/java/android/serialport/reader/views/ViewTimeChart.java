@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.serialport.reader.MainActivity;
+import android.serialport.reader.R;
 import android.serialport.reader.model.DataPackage;
 import android.serialport.reader.utils.Utils;
 import android.view.View;
@@ -197,9 +198,19 @@ public class ViewTimeChart extends View {
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Utils.dp2px(13));
-        canvas.drawText("2次谐波", (legend1Rect.left + legend1Rect.right) / 2, (legend1Rect.top + legend1Rect.bottom) / 2 + Utils.dp2px(10), paint);
-        canvas.drawText("3次谐波", (legend2Rect.left + legend2Rect.right) / 2, (legend2Rect.top + legend2Rect.bottom) / 2 + Utils.dp2px(10), paint);
         canvas.drawText("发射基波", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(10), paint);
+        if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
+        canvas.drawText("2次谐波", (legend1Rect.left + legend1Rect.right) / 2, (legend1Rect.top + legend1Rect.bottom) / 2 + Utils.dp2px(10), paint);
+        if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
+        canvas.drawText("3次谐波", (legend2Rect.left + legend2Rect.right) / 2, (legend2Rect.top + legend2Rect.bottom) / 2 + Utils.dp2px(10), paint);
 
 
         //draw time chart

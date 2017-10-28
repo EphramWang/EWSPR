@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.serialport.reader.R;
 import android.serialport.reader.model.DataPackage;
 import android.serialport.reader.MainActivity;
 import android.serialport.reader.utils.Utils;
@@ -184,11 +185,11 @@ public class ViewBarChart extends View {
         }
 
         float margin = Utils.dp2px(13);
-        paint.setColor(Color.GREEN);
+        paint.setColor(getResources().getColor(R.color.colorRX1));
         canvas.drawRoundRect(new RectF(barRects[0].left + margin, barRects[0].top + (barRects[0].height() - margin * 2) * (1 - data1) + margin, barRects[0].right - margin, barRects[0].bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
-        paint.setColor(Color.RED);
+        paint.setColor(getResources().getColor(R.color.colorRX2));
         canvas.drawRoundRect(new RectF(barRects[1].left + margin, barRects[1].top + (barRects[1].height() - margin * 2) * (1 - data2) + margin, barRects[1].right - margin, barRects[1].bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
-        paint.setColor(Color.YELLOW);
+        paint.setColor(getResources().getColor(R.color.colorRX3));
         canvas.drawRoundRect(new RectF(barRects[2].left + margin, barRects[2].top + (barRects[2].height() - margin * 2) * (1 - data3)+ margin, barRects[2].right - margin, barRects[2].bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
 
     }
