@@ -59,20 +59,31 @@
     <Preference
         android:key="sd"
         android:title="存储状态"/>
+    <EditTextPreference
+        android:key="filePath"
+        android:title="数据包存放目录"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="datapacksize"
+        android:title="数据包文件数据个数"
+        android:persistent="true">
+    </EditTextPreference>
+
+    <EditTextPreference
+        android:key="screenshotPath"
+        android:title="截图存放目录"
+        android:persistent="true">
+    </EditTextPreference>
+
+    <Preference
+        android:key="cleardata"
+        android:title="清除所有数据"/>
     <ListPreference
         android:key="checksum"
         android:title="checksum"
         android:entries="@array/checksum_name"
         android:entryValues="@array/checksum_value"
         android:persistent="true"/>
-    <!--<EditTextPreference-->
-        <!--android:key="filePath"-->
-        <!--android:title="数据包存放目录"-->
-        <!--android:persistent="true">-->
-    <!--</EditTextPreference>-->
-    <!--<EditTextPreference-->
-        <!--android:key="screenshotPath"-->
-        <!--android:title="截图存放目录"-->
-        <!--android:persistent="true">-->
-    <!--</EditTextPreference>-->
+
 </PreferenceScreen>

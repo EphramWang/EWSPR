@@ -58,6 +58,10 @@ public class Application extends android.app.Application {
             String path = sp.getString("DEVICE", "");
             int baudrate = Integer.decode(sp.getString("BAUDRATE", "-1"));
 
+            MainActivity.filePath = sp.getString("filePath", "/datapack");
+            MainActivity.screenshotPath = sp.getString("screenshotPath", "/datapackScreenShot");
+            MainActivity.datapackNumToSaveInFile = sp.getInt("datapacksize", 500);
+
 			/* Check parameters */
             if ((path.length() == 0) || (baudrate == -1)) {
                 throw new InvalidParameterException();

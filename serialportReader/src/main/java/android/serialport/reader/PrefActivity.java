@@ -2,6 +2,7 @@ package android.serialport.reader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -9,9 +10,12 @@ import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.serialport.SerialPortFinder;
 import android.serialport.reader.utils.DataConstants;
+import android.serialport.reader.utils.Utils;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.io.File;
 
 /**
  * Created by ning on 17/9/13.
@@ -162,6 +166,60 @@ public class PrefActivity extends PreferenceActivity {
                 return false;
             }
         });
+
+        //filePath
+        final EditTextPreference filePath = (EditTextPreference) findPreference("filePath");
+        filePath.setSummary(MainActivity.filePath);
+        filePath.setText(MainActivity.filePath);
+        filePath.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                MainActivity.filePath = (String) newValue;
+                return true;
+            }
+        });
+
+        //datapacksize
+        final EditTextPreference datapacksize = (EditTextPreference) findPreference("datapacksize");
+        datapacksize.setSummary(MainActivity.datapackNumToSaveInFile + "");
+        datapacksize.setText(MainActivity.datapackNumToSaveInFile + "");
+        datapacksize.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                MainActivity.datapackNumToSaveInFile = Integer.parseInt((String) newValue);
+                return true;
+            }
+        });
+
+        //screenshotPath
+        final EditTextPreference screenshotPath = (EditTextPreference) findPreference("screenshotPath");
+        screenshotPath.setSummary(MainActivity.screenshotPath);
+        screenshotPath.setText(MainActivity.screenshotPath);
+        screenshotPath.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary((String) newValue);
+                MainActivity.screenshotPath = (String) newValue;
+                return true;
+            }
+        });
+
+        //cleardata
+        final Preference cleardata = findPreference("sd");
+        cleardata.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                String dirName = Environment.getExternalStorageDirectory() + MainActivity.filePath;
+                File dir = new File(dirName);
+                if (dir.exists() && dir.isDirectory()) {
+                    Utils.deleteFile(dir);
+                }
+                return true;
+            }
+        });
+
 
         // checksum
         final ListPreference checksum =  (ListPreference) findPreference("checksum");

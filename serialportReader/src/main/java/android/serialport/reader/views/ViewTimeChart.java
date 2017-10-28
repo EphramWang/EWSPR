@@ -178,7 +178,8 @@ public class ViewTimeChart extends View {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Utils.dp2px(22));
-        canvas.drawText("20 seconds", (chartTopRect.left + chartTopRect.right) / 2, chartTopRect.bottom - Utils.dp2px(10), paint);
+        String timeLength = MainActivity.datapackNumToSaveInFile / 50 + "秒时长";
+        canvas.drawText(timeLength, (chartTopRect.left + chartTopRect.right) / 2, chartTopRect.bottom - Utils.dp2px(10), paint);
 
         //draw legends
         float everyWidth = chartBottomRect.width() / 10;
