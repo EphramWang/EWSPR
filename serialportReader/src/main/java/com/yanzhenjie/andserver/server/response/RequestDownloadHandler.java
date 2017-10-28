@@ -76,9 +76,11 @@ public class RequestDownloadHandler implements RequestHandler {
                     System.out.println("path=" + readfile.getPath());
                     System.out.println("absolutepath=" + readfile.getAbsolutePath());
                     System.out.println("name=" + readfile.getName());
-                    sStart += "<a href=\"/download?filename=" + readfile.getName() + "\">" + readfile.getName() + "</a> <br/>\n";
+                    sStart += "<a href=\"/download?filename=" + readfile.getName() + "\">" + readfile.getName() + "</a> \n";
+                    sStart += "<a href=\"/delete?dir=" +readfile.getParent().substring(readfile.getParent().lastIndexOf('/') + 1) + "&&filename=" + readfile.getName() + "\">" + "删除文件" + "</a> <br/>\n";
                 } else {
-                    sStart += "<a href=\"/files?dir=" + readfile.getName() + "\">" + readfile.getName() + "</a> <br/>\n";
+                    sStart += "<a href=\"/files?dir=" + readfile.getName() + "\">" + readfile.getName() + "</a> \n";
+                    sStart += "<a href=\"/delete?dir=" + readfile.getName() + "\">" + "删除文件夹" + "</a> <br/>\n";
                 }
             }
         }

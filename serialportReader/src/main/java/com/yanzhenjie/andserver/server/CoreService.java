@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 
 import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
+import com.yanzhenjie.andserver.server.response.RequestDeleteHandler;
 import com.yanzhenjie.andserver.server.response.RequestDownloadHandler;
 import com.yanzhenjie.andserver.server.response.RequestFileHandler;
 import com.yanzhenjie.andserver.server.response.RequestLoginHandler;
@@ -52,6 +53,7 @@ public class CoreService extends Service {
                 .registerHandler("files", new RequestDownloadHandler())
                 .registerHandler("download", new RequestFileHandler())
                 .registerHandler("upload", new RequestUploadHandler())
+                .registerHandler("delete", new RequestDeleteHandler())
                 .website(new AssetsWebsite(mAssetManager, "web"))
 //                .website(new StorageWebsite(new File(Environment.getExternalStorageDirectory(), "web").getAbsolutePath()))
                 .listener(mListener)
