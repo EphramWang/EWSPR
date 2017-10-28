@@ -1,5 +1,6 @@
 package android.serialport.reader.utils;
 
+import android.os.Environment;
 import android.serialport.reader.Application;
 import android.util.DisplayMetrics;
 
@@ -112,5 +113,15 @@ public class Utils {
             return false;
         }
         return false;
+    }
+
+    public boolean isExternalStorageEnough() {
+        File sdcard_filedir = Environment.getExternalStorageDirectory();//得到sdcard的目录作为一个文件对象
+        long usableSpace = sdcard_filedir.getUsableSpace();//获取文件目录对象剩余空间
+        long totalSpace = sdcard_filedir.getTotalSpace();
+        if(usableSpace < 1024 * 1024 * 100){//判断剩余空间是否小于100M
+            return false;
+        }
+        return true;
     }
 }
