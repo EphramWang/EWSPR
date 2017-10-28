@@ -42,9 +42,11 @@ public class ViewSettings extends LinearLayout implements View.OnClickListener{
         switch (v.getId()) {
             case R.id.button_left:
                 //vol decrease
+                ((MainActivity)getContext()).setVolumeDown();
                 break;
             case R.id.button_right:
                 //vol inc
+                ((MainActivity)getContext()).setVolumeUp();
                 break;
             case R.id.button_top:
                 //power+

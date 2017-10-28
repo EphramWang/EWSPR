@@ -100,6 +100,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     public static int datapackNumToSaveInFile = 500;
     public static int maxDisplayLength = 500;
 
+    private static int currentVolume = 0;
+
     //数据
     public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存
 
@@ -306,7 +308,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                 if (currentViewType == VIEW_TYPE_HOME || currentViewType == VIEW_TYPE_SETTINGS)
                     startActivity(new Intent(MainActivity.this, PrefActivity.class));
                 else
-                    ;
+                    ShowVolumeSelect();
                 break;
             case R.id.top_light_button:
                 setBrightness();
@@ -377,10 +379,12 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
         int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
-        if (currentVol > maxVol / 2)
+        if (currentVol == 0) {
+            setVolume(currentVolume);
+        } else {
+            currentVolume = currentVol;
             setVolume(0);
-        else
-            setVolume(maxVol);
+        }
     }
 
     /**
@@ -391,6 +395,38 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
         //audioManager.adjustVolume(AudioManager.ADJUST_LOWER, AudioManager.FLAG_SHOW_UI);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, AudioManager.FLAG_SHOW_UI);
+    }
+
+    public void setVolumeUp() {
+        AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        int newVol = currentVol + maxVol / 10;
+        if (newVol > maxVol)
+            newVol = maxVol;
+
+        setVolume(newVol);
+    }
+
+    public void setVolumeDown() {
+        AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        int newVol = currentVol - maxVol / 10;
+        if (newVol < 0)
+            newVol = 0;
+
+        setVolume(newVol);
+    }
+
+    public void ShowVolumeSelect() {
+        AudioManager audioManager = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
+        int currentVol = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        int maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+        setVolume(currentVol);
     }
 
     /**
