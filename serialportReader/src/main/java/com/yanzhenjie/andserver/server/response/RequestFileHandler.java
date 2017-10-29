@@ -44,8 +44,9 @@ public class RequestFileHandler implements RequestHandler {
         Log.i("AndServer", "Params: " + params.toString());
 
         String filename = URLDecoder.decode(params.get("filename"), "utf-8");
+        String dir = URLDecoder.decode(params.get("dir"), "utf-8");
 
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+ MainActivity.filePath + "/" + filename);
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+ MainActivity.filePath + "/" + dir + "/" + filename);
         if (file.exists()) {
             response.setStatusCode(200);
 
