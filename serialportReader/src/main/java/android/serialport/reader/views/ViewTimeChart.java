@@ -21,7 +21,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ViewTimeChart extends View {
 
-    public static final int TIME_CHART_X_NUM = 100;//显示的时间长度可变（此时间长度在参数设置界面中设置，设置值为10秒（250点）~120秒（3000点）可调）
     public static final float MAX_POWER = 100f;//y轴最高点
 
     Context context;
@@ -80,7 +79,7 @@ public class ViewTimeChart extends View {
         Path pathRX3 = new Path();
         Path pathBase = new Path();
         for (int i = dataPackageArrayList.size() - 1; i >= 0; i--) {
-            int dataCount = MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 ? TIME_CHART_X_NUM * 2 : TIME_CHART_X_NUM;
+            int dataCount = MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 ? MainActivity.maxDisplayLength * 2 : MainActivity.maxDisplayLength;
             float x = (dataCount - (dataPackageArrayList.size() - 1) + i) * chartRect.width() / dataCount + chartRect.left;
             if (x < chartRect.left)
                 break;
@@ -179,7 +178,7 @@ public class ViewTimeChart extends View {
         paint.setColor(Color.WHITE);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Utils.dp2px(22));
-        String timeLength = MainActivity.datapackNumToSaveInFile / 50 + "秒时长";
+        String timeLength = MainActivity.maxDisplayLength / 50 + "秒时长";
         canvas.drawText(timeLength, (chartTopRect.left + chartTopRect.right) / 2, chartTopRect.bottom - Utils.dp2px(10), paint);
 
         //draw legends

@@ -61,6 +61,7 @@ public class Application extends android.app.Application {
             MainActivity.filePath = sp.getString("filePath", "/datapack");
             MainActivity.screenshotPath = sp.getString("screenshotPath", "/datapackScreenShot");
             MainActivity.datapackNumToSaveInFile = Integer.parseInt(sp.getString("datapacksize", "500"));
+            MainActivity.maxDisplayLength = Integer.parseInt(sp.getString("SYBX", "500"));
 
 			/* Check parameters */
             if ((path.length() == 0) || (baudrate == -1)) {

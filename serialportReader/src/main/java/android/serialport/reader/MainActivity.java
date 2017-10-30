@@ -97,8 +97,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     public static boolean isCheckSum = false;//是否校验
     public static String filePath = "/datapack";//数据包保存的路径
     public static String screenshotPath = "/datapackScreenShot";//截图文件存放文件夹的路径
-    public static int datapackNumToSaveInFile = 500;
-    public static int maxDisplayLength = 500;
+    public static int datapackNumToSaveInFile = 500;//多少个数据包保存到一个文件
+    public static int maxDisplayLength = 500; //时域波形显示长度
 
     private static int currentVolume = 0;
 

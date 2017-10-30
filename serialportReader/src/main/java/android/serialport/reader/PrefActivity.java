@@ -116,7 +116,7 @@ public class PrefActivity extends PreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
-                byte content = (byte) Integer.parseInt((String) newValue);
+                MainActivity.maxDisplayLength = Integer.parseInt((String) newValue);
                 return true;
             }
         });

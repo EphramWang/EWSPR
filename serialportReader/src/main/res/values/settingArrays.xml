@@ -134,11 +134,11 @@
         <item>120s</item>
     </string-array>
     <string-array name="sybx_value">
-        <item>10s</item>
-        <item>20s</item>
-        <item>30s</item>
-        <item>60s</item>
-        <item>120s</item>
+        <item>250</item>
+        <item>500</item>
+        <item>750</item>
+        <item>1500</item>
+        <item>3000</item>
     </string-array>
 
     <string-array name="checksum_name">
