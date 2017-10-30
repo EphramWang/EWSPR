@@ -593,7 +593,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 && dataPackage.dataBytes[1] == DataConstants.command_receive_data) {
                             //校验合格的数据包
                             dataPackageLinkedBlockingQueue.put(dataPackage);//数据包保存到队列
-                            if (dataPackages4display.size() > maxDisplayLength + 1) {
+                            if (dataPackages4display.size() > maxDisplayLength * 2 + 1) {
                                 dataPackages4display.remove(0);
                             }
                             dataPackages4display.add(dataPackage);
