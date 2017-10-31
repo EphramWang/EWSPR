@@ -46,13 +46,23 @@ public class PrefActivity extends PreferenceActivity {
 
         //工作模式
         final ListPreference workmode = (ListPreference) findPreference("WORKMODE");
-        workmode.setSummary(workmode.getEntry());
+        //workmode.setSummary(workmode.getEntry());
+        if (MainActivity.mWorkMode == MainActivity.WORK_MODE_STANDBY) {
+            workmode.setSummary(workmode.getEntries()[0]);
+        } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
+            workmode.setSummary(workmode.getEntries()[1]);
+        } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3) {
+            workmode.setSummary(workmode.getEntries()[2]);
+        } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3) {
+            workmode.setSummary(workmode.getEntries()[3]);
+        }
         workmode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 byte content = (byte) Integer.parseInt((String) newValue);
                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, content)));
+                MainActivity.mWorkMode = content;
                 return true;
             }
         });
@@ -66,6 +76,7 @@ public class PrefActivity extends PreferenceActivity {
                 preference.setSummary((String) newValue);
                 byte content = (byte) Integer.parseInt((String) newValue);
                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, content)));
+                MainActivity.mSensitivity = content;
                 return true;
             }
         });
@@ -79,6 +90,7 @@ public class PrefActivity extends PreferenceActivity {
                 preference.setSummary((String) newValue);
                 byte content = (byte) Integer.parseInt((String) newValue);
                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, content)));
+                MainActivity.mPower = content;
                 return true;
             }
         });
@@ -92,6 +104,7 @@ public class PrefActivity extends PreferenceActivity {
                 preference.setSummary((String) newValue);
                 byte content = (byte) Integer.parseInt((String) newValue);
                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, content)));
+                MainActivity.mSZFDZY = content;
                 return true;
             }
         });
@@ -105,6 +118,7 @@ public class PrefActivity extends PreferenceActivity {
                 preference.setSummary((String) newValue);
                 byte content = (byte) Integer.parseInt((String) newValue);
                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, content)));
+                MainActivity.mSZBZPL = content;
                 return true;
             }
         });

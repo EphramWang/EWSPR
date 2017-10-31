@@ -71,7 +71,7 @@ public class ViewTimeChart extends View {
     private void drawTimeChart(Canvas canvas) {
 //        ArrayList<DataPackage> dataPackageArrayList = new ArrayList<>();
 //        ((MainActivity)context).dataPackageLinkedBlockingQueue.drainTo(dataPackageArrayList);
-        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataPackages4display;
+        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = (CopyOnWriteArrayList<DataPackage>) ((MainActivity)context).dataPackages4display.clone();
         if (dataPackageArrayList.size() < 1)
             return;
 
