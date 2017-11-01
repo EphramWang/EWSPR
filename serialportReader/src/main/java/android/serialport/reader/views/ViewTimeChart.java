@@ -87,7 +87,7 @@ public class ViewTimeChart extends View {
             float y1 = 0, y2 = 0;
             float y3 = chartRect.top + chartRect.height() * (1f - dataPackageArrayList.get(i).getSettingPower() / 10f);
             data1 = dataPackageArrayList.get(i).getSettingPower() / 10f;
-            if (i == dataPackageArrayList.size() - 1) {
+            if (pathBase.isEmpty()) {
                 pathBase.moveTo(x, y3);
             } else {
                 pathBase.lineTo(x, y3);
@@ -95,7 +95,7 @@ public class ViewTimeChart extends View {
             if (dataPackageArrayList.get(i).getWaveType() == 1) {//二次
                 y1 = chartRect.top + chartRect.height() * (1f -dataPackageArrayList.get(i).getWavePower() / MAX_POWER);
 
-                if (i == dataPackageArrayList.size() - 1) {
+                if (pathRX2.isEmpty()) {
                     pathRX2.moveTo(x, y1);
                 } else {
                     pathRX2.lineTo(x, y1);
@@ -103,7 +103,7 @@ public class ViewTimeChart extends View {
             } else if (dataPackageArrayList.get(i).getWaveType() == 0) {//三次
                 y2 = chartRect.top + chartRect.height() * (1f - dataPackageArrayList.get(i).getWavePower() / MAX_POWER);
 
-                if (i == dataPackageArrayList.size() - 1) {
+                if (pathRX3.isEmpty()) {
                     pathRX3.moveTo(x, y2);
                 } else {
                     pathRX3.lineTo(x, y2);
