@@ -104,6 +104,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     private static int currentVolume = 0;
 
+    private String fileSaveSubDirName;//数据包保存的子文件夹， 每次启动程序根据时间新建一个
+
     //数据
     public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存
 
@@ -128,6 +130,9 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fileSaveSubDirName = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date());
+
         setContentView(R.layout.layout_main);
         tvTime = (TextView) findViewById(R.id.top_time_tv);
         tvTime.setOnClickListener(this);
@@ -493,7 +498,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         Date date = new Date(listToBeSaved.get(0).timestamp);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         String dateString = formatter.format(date);
-        String subDirName = dateString.substring(0, 16);
+        //String subDirName = dateString.substring(0, 16);
+        String subDirName = fileSaveSubDirName;
         File subDir = new File(dirName + "/" + subDirName);
         if (!subDir.exists())
             subDir.mkdir();
