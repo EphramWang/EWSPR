@@ -647,14 +647,14 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         @Override
         public void run() {
             while (true) {
-                if (dataPackageLinkedBlockingQueue.size() > datapackNumToSaveInFile * 2) {
+                if (dataPackageLinkedBlockingQueue.size() > datapackNumToSaveInFile) {
                     //保存到外部
                     ArrayList<DataPackage> listToBeSaved = new ArrayList<>(datapackNumToSaveInFile);
                     dataPackageLinkedBlockingQueue.drainTo(listToBeSaved, datapackNumToSaveInFile);
                     saveDataPackagesToStorage(listToBeSaved);
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
