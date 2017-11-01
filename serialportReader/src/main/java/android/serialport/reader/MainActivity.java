@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.serialport.reader.model.DataPackage;
 import android.serialport.reader.model.ReceivedData;
 import android.serialport.reader.test.MainMenu;
+import android.serialport.reader.utils.AlertThread;
 import android.serialport.reader.utils.DataConstants;
 import android.serialport.reader.views.ViewBarChart;
 import android.serialport.reader.views.ViewFrequencyChart;
@@ -42,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -112,6 +114,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     ReadSerialPortThread readSerialPortThread;
     SaveDataPackToStorageThread saveDataThread;
 
+    AlertThread alertThread;
+
     Timer timer = new Timer();
     TimerTask timerTask = new TimerTask() {
         public void run() {
@@ -161,6 +165,9 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         timer.schedule(timerTask, 10000, 10000);
 
         initParams();
+
+        alertThread = new AlertThread();
+        alertThread.start();
     }
 
     @Override
@@ -598,6 +605,27 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                             }
                             dataPackages4display.add(dataPackage);
                             Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
+                            if (alertThread != null) {
+                                int wavePower = dataPackage.getWavePower();
+                                float vol = wavePower / 100f;
+                                if (dataPackage.getWaveType() == 0) { //3次
+                                    alertThread.setVolume(vol, vol);
+                                    alertThread.addSound(4);
+                                } else if (dataPackage.getWaveType() == 1) {
+                                    alertThread.setVolume(vol, vol);
+                                    alertThread.addSound(1);
+                                }
+//                                if (new Random().nextInt(10) > 5) {
+//                                    if (new Random().nextInt(10) > 5)
+//                                        alertThread.setVolume(0.2f, 0.2f);
+//                                    else
+//                                        alertThread.setVolume(0.8f, 0.8f);
+//                                    alertThread.addSound(4);
+//                                }else {
+//                                    alertThread.setVolume(0.8f, 0.8f);
+//                                    alertThread.addSound(1);
+//                                }
+                            }
                         }
                     }
                 } catch (InterruptedException e) {
