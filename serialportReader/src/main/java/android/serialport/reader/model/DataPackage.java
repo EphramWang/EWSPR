@@ -34,6 +34,15 @@ public class DataPackage {
         return sum == 0;
     }
 
+    public byte[] getSaveDataBytes() {
+        //// TODO: 2017/11/2  16-19   532~573 数据没处理 还有校验
+        byte[] saveDatabytes = new byte[DataConstants.DATA_FRAME_SAVE_LENGTH];
+        System.arraycopy(dataBytes, 0, saveDatabytes, 0, DataConstants.DATA_FRAME_LENGTH);
+        saveDatabytes[2] = (byte)0x3A;
+        saveDatabytes[3] = (byte)0x02;
+        return saveDatabytes;
+    }
+
 
     /**
      * 周期序号

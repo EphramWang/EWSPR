@@ -517,7 +517,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
             try {
                 fos = new FileOutputStream(file);
                 for (DataPackage dataPack: listToBeSaved) {
-                    fos.write(dataPack.dataBytes);
+                    fos.write(dataPack.getSaveDataBytes());
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -619,7 +619,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                     alertThread.addSound(4);
                                 } else if (dataPackage.getWaveType() == 1) {
                                     alertThread.setVolume(vol, vol);
-                                    alertThread.addSound(1);
+                                    alertThread.addSound(2);
                                 }
 //                                if (new Random().nextInt(10) > 5) {
 //                                    if (new Random().nextInt(10) > 5)
