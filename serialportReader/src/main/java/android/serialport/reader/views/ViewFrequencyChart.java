@@ -46,7 +46,7 @@ public class ViewFrequencyChart extends View {
     protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
         super.onSizeChanged(width, height, oldWidth, oldHeight);
         if (width > 0 && height > 0) {
-            mainRect = new RectF(0, 0, width, height);
+            mainRect = new RectF(Utils.dp2px(10), 0, width - Utils.dp2px(10), height);
             computeRect();
         }
     }

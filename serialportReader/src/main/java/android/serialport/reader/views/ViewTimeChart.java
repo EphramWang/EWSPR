@@ -54,7 +54,7 @@ public class ViewTimeChart extends View {
         barRect = new RectF(Utils.dp2px(10), mainRect.top + Utils.dp2px(20), Utils.dp2px(10) + mainRect.width() / 6, mainRect.bottom - Utils.dp2px(20));
         barAxisRect = new RectF(barRect.right, mainRect.top + Utils.dp2px(20), Utils.dp2px(10) + mainRect.width() / 6 * 2, mainRect.bottom - Utils.dp2px(20));
         float everyHeight = mainRect.height() / 7;
-        chartRect = new RectF(barAxisRect.right, mainRect.top + everyHeight, Utils.dp2px(10) + mainRect.right, mainRect.bottom - everyHeight);
+        chartRect = new RectF(barAxisRect.right, mainRect.top + everyHeight, mainRect.right - Utils.dp2px(20), mainRect.bottom - everyHeight);
         chartTopRect = new RectF(chartRect.left, mainRect.top, chartRect.right, chartRect.top);
         chartBottomRect = new RectF(chartRect.left, chartRect.bottom, chartRect.right, mainRect.bottom);
 
