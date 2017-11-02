@@ -7,6 +7,7 @@ package android.serialport.reader.utils;
 public class DataConstants {
 
     public static final int DATA_FRAME_LENGTH = 534;
+    public static final int DATA_FRAME_SAVE_LENGTH = 576;//测量数据包大小为576Bytes（包含新增的42Bytes的未定义备用数据）
     public static final int COMMAND_FRAME_LENGTH = 7;
 
     public static final byte FRAME_HEAD = (byte) 0xFE;

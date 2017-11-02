@@ -9,6 +9,8 @@ public class AlertThread extends Thread {
     public static final int RATE = 44100;
 //    public static final float MAXVOLUME = 100f;
 
+    public static int audioLength = 1000;
+
     AudioTrack mAudioTrack;
     public static boolean ISPLAYSOUND;
 
@@ -29,7 +31,7 @@ public class AlertThread extends Thread {
      **/
     byte[][] wave;
 
-    int[] rateArray = {100, 200, 400, 800, 1600};
+    int[] rateArray = {100, 200, 400, 800, 1600, 3200};
     int[] lengthArray;
 
     /**
@@ -61,15 +63,16 @@ public class AlertThread extends Thread {
         if (null != mAudioTrack)
             mAudioTrack.play();
         //一直播放
-        while (ISPLAYSOUND) {
+//        while (ISPLAYSOUND) {
 //            mAudioTrack.write(wave[0], 0, lengthArray[0]);
 //            mAudioTrack.write(wave[4], 0, lengthArray[4]);
-        }
+//        }
 
     }
 
     public void addSound(int vol) {
-        mAudioTrack.write(wave[vol], 0, lengthArray[vol] / 8);
+        //mAudioTrack.write(wave[vol], 0, lengthArray[vol] / 8);
+        mAudioTrack.write(wave[vol], 0, audioLength);
     }
 
     /**
