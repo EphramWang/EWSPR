@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:id="@+id/top_layout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:background="#424242">
@@ -55,7 +55,7 @@
 
     <RelativeLayout
         android:id="@+id/bottom_layout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:background="#424242">
@@ -88,7 +88,7 @@
 
     <LinearLayout
         android:id="@+id/center_layout"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_layout"
         android:layout_below="@id/top_layout"
