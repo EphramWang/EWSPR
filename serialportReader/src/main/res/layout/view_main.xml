@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/divider1"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
+            android:layout_margin="15dp"
             android:src="@drawable/chart1" />
 
         <ImageView
@@ -29,7 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/divider1"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
+            android:layout_margin="15dp"
             android:src="@drawable/chart2" />
     </RelativeLayout>
 
@@ -49,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/divider2"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
+            android:layout_margin="15dp"
             android:src="@drawable/chart3" />
 
         <ImageView
@@ -57,7 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/divider2"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
+            android:layout_margin="15dp"
             android:src="@drawable/chart4" />
     </RelativeLayout>
 
