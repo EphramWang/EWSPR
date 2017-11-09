@@ -1,6 +1,8 @@
 package android.serialport.reader;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,21 +15,25 @@ import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.serialport.SerialPortFinder;
 import android.serialport.reader.utils.DataConstants;
+import android.serialport.reader.utils.TimePickerDialog;
 import android.serialport.reader.utils.Utils;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.Calendar;
 
 /**
  * Created by ning on 17/9/13.
  */
 
-public class PrefActivity extends PreferenceActivity {
+public class PrefActivity extends PreferenceActivity  implements TimePickerDialog.TimePickerDialogInterface  {
 
     private Application mApplication;
     private SerialPortFinder mSerialPortFinder;
+
+    TimePickerDialog timePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +254,7 @@ public class PrefActivity extends PreferenceActivity {
             }
         });
 
-        //cleardata
+        //restoreDefalutSettings
         final Preference restoreDefalutSettings = findPreference("restoreDefalutSettings");
         restoreDefalutSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
@@ -289,5 +295,36 @@ public class PrefActivity extends PreferenceActivity {
                 return true;
             }
         });
+
+
+        //datetime
+        final Preference datetime = findPreference("datetime");
+        datetime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                timePickerDialog = new TimePickerDialog(PrefActivity.this);
+                timePickerDialog.showDateAndTimePickerDialog();
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void positiveListener() {
+//        Calendar c = Calendar.getInstance();
+//        int hour = timePickerDialog.getHour();
+//        int minute = timePickerDialog.getMinute();
+//        c.set(timePickerDialog.getYear(), timePickerDialog.getMonth(), timePickerDialog.getDay(),hour, minute);
+//
+//        long when = c.getTimeInMillis();
+//
+//        if(when / 1000 < Integer.MAX_VALUE){
+//            ((AlarmManager)PrefActivity.this.getSystemService(Context.ALARM_SERVICE)).setTime(when);
+//        }
+    }
+
+    @Override
+    public void negativeListener() {
+
     }
 }

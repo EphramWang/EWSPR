@@ -85,7 +85,9 @@
         android:entries="@array/checksum_name"
         android:entryValues="@array/checksum_value"
         android:persistent="true"/>
-
+    <Preference
+        android:key="datetime"
+        android:title="时间日期设置"/>
     <Preference
         android:key="restoreDefalutSettings"
         android:title="恢复出厂设置"/>
