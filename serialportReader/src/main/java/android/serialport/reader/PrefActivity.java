@@ -1,6 +1,9 @@
 package android.serialport.reader;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -241,6 +244,48 @@ public class PrefActivity extends PreferenceActivity {
         checksum.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
+                return true;
+            }
+        });
+
+        //cleardata
+        final Preference restoreDefalutSettings = findPreference("restoreDefalutSettings");
+        restoreDefalutSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AlertDialog.Builder(PrefActivity.this).setTitle("恢复出厂设置").setMessage("确定吗？").
+                        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sp = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+                                MainActivity.mWorkMode = MainActivity.WORK_MODE_BOTH_RX2_RX3;
+                                sp.edit().putString("WORKMODE", "3").apply();
+                                MainActivity.mSensitivity = 0x05;
+                                sp.edit().putString("SENSITIVITY", "5").apply();
+                                MainActivity.mPower = 0x00;
+                                sp.edit().putString("POWER", "0").apply();
+                                MainActivity.mSZBZPL = 0x00;
+                                sp.edit().putString("SZBZPL", "0").apply();
+                                MainActivity.mSZFDZY = 0x00;
+                                sp.edit().putString("SZFDZY", "0").apply();
+                                MainActivity.filePath = "/datapack";
+                                sp.edit().putString("filePath", "/datapack").apply();
+                                MainActivity.screenshotPath = "/datapackScreenShot";
+                                sp.edit().putString("screenshotPath", "/datapackScreenShot").apply();
+                                MainActivity.datapackNumToSaveInFile = 500;
+                                sp.edit().putString("datapacksize", "500").apply();
+                                MainActivity.maxDisplayLength = 500;
+                                sp.edit().putString("SYBX", "500").apply();
+
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, MainActivity.mWorkMode)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, MainActivity.mSensitivity)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, MainActivity.mPower)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, MainActivity.mSZBZPL)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, MainActivity.mSZFDZY)));
+
+                                finish();
+                            }
+                        }).setNegativeButton("取消", null).show();
                 return true;
             }
         });
