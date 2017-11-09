@@ -302,9 +302,11 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
         datetime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                timePickerDialog = new TimePickerDialog(PrefActivity.this);
-                timePickerDialog.showDateAndTimePickerDialog();
-                return true;
+//                timePickerDialog = new TimePickerDialog(PrefActivity.this);
+//                timePickerDialog.showDateAndTimePickerDialog();
+
+                startActivity(new Intent(Settings.ACTION_DATE_SETTINGS));
+                return false;
             }
         });
     }
@@ -321,6 +323,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
 //        if(when / 1000 < Integer.MAX_VALUE){
 //            ((AlarmManager)PrefActivity.this.getSystemService(Context.ALARM_SERVICE)).setTime(when);
 //        }
+
     }
 
     @Override
