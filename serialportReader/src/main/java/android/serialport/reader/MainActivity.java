@@ -342,7 +342,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                 break;
             case R.id.top_time_tv:
             case R.id.top_battery:
-                startActivity(new Intent(MainActivity.this, MainMenu.class));
+                //startActivity(new Intent(MainActivity.this, MainMenu.class));
                 break;
         }
     }
