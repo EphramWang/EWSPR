@@ -92,7 +92,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     //系统的一些参数
     public static byte mSensitivity = 0x05;//灵敏度设置
     public static byte mWorkMode = WORK_MODE_BOTH_RX2_RX3;//工作状态
-    public static byte mPower = 0x00;//功率 发射基波 uint8
+    public static byte mPower = 0x05;//功率 发射基波 uint8
     public static byte mSZBZPL = 0x00;//数字本振频率
     public static byte mSZFDZY = 0x00;//数字放大增益
 

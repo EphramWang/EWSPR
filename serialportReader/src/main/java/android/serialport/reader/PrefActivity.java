@@ -268,8 +268,8 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                                 sp.edit().putString("WORKMODE", "3").apply();
                                 MainActivity.mSensitivity = 0x05;
                                 sp.edit().putString("SENSITIVITY", "5").apply();
-                                MainActivity.mPower = 0x00;
-                                sp.edit().putString("POWER", "0").apply();
+                                MainActivity.mPower = 0x05;
+                                sp.edit().putString("POWER", "5").apply();
                                 MainActivity.mSZBZPL = 0x00;
                                 sp.edit().putString("SZBZPL", "0").apply();
                                 MainActivity.mSZFDZY = 0x00;
