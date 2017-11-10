@@ -89,7 +89,7 @@ public class ViewFrequencyChart extends View {
     private void drawChart(Canvas canvas) {
         //ArrayList<DataPackage> dataPackageArrayList = new ArrayList<>();
         //((MainActivity)context).dataPackageLinkedBlockingQueue.drainTo(dataPackageArrayList);
-        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataPackages4display;
+        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = (CopyOnWriteArrayList<DataPackage>) ((MainActivity)context).dataPackages4display.clone();
 
         DataPackage rx2Pack = null;
         DataPackage rx3Pack = null;
