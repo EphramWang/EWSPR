@@ -11,11 +11,11 @@
         android:layout_weight="1">
         <ImageView
             android:id="@+id/button_top"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/signal_up" />
 
         <ImageView
@@ -48,26 +48,26 @@
 
         <ImageView
             android:id="@+id/button_center"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/set" />
 
         <ImageView
             android:id="@+id/button_right"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/volume_up" />
 
         <ImageView
             android:id="@+id/button_left"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:src="@drawable/volume_down"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -83,10 +83,11 @@
 
         <ImageView
             android:id="@+id/button_bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:scaleType="centerInside"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
             android:src="@drawable/signal_down" />
 
         <TextView
@@ -95,7 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/tv_bottom_right"
@@ -103,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textSize="18sp"/>
 
     </RelativeLayout>
 
