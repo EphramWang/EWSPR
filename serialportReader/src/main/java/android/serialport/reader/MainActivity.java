@@ -209,7 +209,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     }
 
     public void sendBytes(byte[] bytes) {
-        Log.e("www", "sendBytes " + bytes + " bytes.length" + bytes.length);
+        //Log.e("www", "sendBytes " + bytes + " bytes.length" + bytes.length);
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(bytes);
@@ -489,7 +489,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
 
     private void saveDataPackagesToStorage(ArrayList<DataPackage> listToBeSaved) {
-        Log.e("www", "saveDataPackagesToStorage, length=" + listToBeSaved.size());
+        //Log.e("www", "saveDataPackagesToStorage, length=" + listToBeSaved.size());
         String dirName = Environment.getExternalStorageDirectory() + filePath;
         File dir = new File(dirName);
         if (!dir.exists())
@@ -582,7 +582,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                             && receivedData.buffer[0] == DataConstants.FRAME_HEAD
                             && receivedData.buffer[6] == DataConstants.FRAME_TAIL) { //指令帧
                         CommandPackage commandPackage = new CommandPackage((receivedData));
-                        Log.e("www", "ReadSerialPortThread  received CommandPackage..." +  " dataBytes.length" + commandPackage.dataBytes.length);
+                        //Log.e("www", "ReadSerialPortThread  received CommandPackage..." +  " dataBytes.length" + commandPackage.dataBytes.length);
                         //processCommandPackage(commandPackage);
                         EventBus.getDefault().post(new receiveCommandPackageEvent(commandPackage));
                     } else if (receivedData.size > 0 && receivedData.buffer[0] == DataConstants.FRAME_HEAD && receivedData.buffer[1] == DataConstants.command_receive_data) { //数据帧开头
@@ -595,7 +595,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         dataLen[1] = receivedData.buffer[3];
                         int length = Utils.byteArrayToShort(dataLen, 0);
                         length = DataConstants.DATA_FRAME_LENGTH;//写死数据帧长度
-                        Log.e("www", "ReadSerialPortThread  length" +  length);
+                        //Log.e("www", "ReadSerialPortThread  length" +  length);
                         while (copyIndex < length) {//循环读取数据包后面的部分
                             ReceivedData otherReceivedData = receivedDataLinkedBlockingQueue.take();
                             System.arraycopy(otherReceivedData.buffer, 0, dataPackage.dataBytes, copyIndex, otherReceivedData.size);//复制一段数据
@@ -610,7 +610,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 dataPackages4display.remove(0);
                             }
                             dataPackages4display.add(dataPackage);
-                            Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
+                            //Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
                             if (alertThread != null) {
                                 int wavePower = dataPackage.getWavePower();
                                 float vol = wavePower / 100f;
