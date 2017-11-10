@@ -182,11 +182,11 @@ public class ViewTimeChart extends View {
         canvas.drawText(timeLength, (chartTopRect.left + chartTopRect.right) / 2, chartTopRect.bottom - Utils.dp2px(10), paint);
 
         //draw legends
-        float everyWidth = chartBottomRect.width() / 19;
+        float everyWidth = chartBottomRect.width() / 17;
         float legendMargin = chartBottomRect.height() / 8;
-        RectF legend1Rect = new RectF(chartBottomRect.left + everyWidth, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 6, chartBottomRect.bottom - legendMargin);
-        RectF legend2Rect = new RectF(chartBottomRect.left + everyWidth * 7, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 12, chartBottomRect.bottom - legendMargin);
-        RectF legend3Rect = new RectF(chartBottomRect.left + everyWidth * 13, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 18, chartBottomRect.bottom - legendMargin);
+        RectF legend1Rect = new RectF(chartBottomRect.left, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 5, chartBottomRect.bottom - legendMargin);
+        RectF legend2Rect = new RectF(chartBottomRect.left + everyWidth * 6, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 11, chartBottomRect.bottom - legendMargin);
+        RectF legend3Rect = new RectF(chartBottomRect.left + everyWidth * 12, chartBottomRect.top + legendMargin, chartBottomRect.left + everyWidth * 17, chartBottomRect.bottom - legendMargin);
         paint.setColor(Color.RED);
         canvas.drawRoundRect(legend1Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
         paint.setColor(Color.YELLOW);
@@ -196,7 +196,7 @@ public class ViewTimeChart extends View {
 
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(Utils.dp2px(11));
+        paint.setTextSize(Utils.dp2px(13));
         canvas.drawText("发射基波", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(5), paint);
         if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
             paint.setColor(Color.BLACK);

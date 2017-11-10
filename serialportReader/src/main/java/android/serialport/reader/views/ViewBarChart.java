@@ -130,12 +130,12 @@ public class ViewBarChart extends View {
         }
 
         //draw bar legend
-        float legendTop = bar1Rect.bottom + mainRect.height() / 20;
-        float legendBottom = mainRect.bottom - mainRect.height() / 20;
+        float legendTop = bar1Rect.bottom + mainRect.height() / 40;
+        float legendBottom = mainRect.bottom - mainRect.height() / 40;
 
-        RectF legend1Rect = new RectF(bar1Rect.left, legendTop, bar1Rect.right, legendBottom);
-        RectF legend2Rect = new RectF(bar2Rect.left, legendTop, bar2Rect.right, legendBottom);
-        RectF legend3Rect = new RectF(bar3Rect.left, legendTop, bar3Rect.right, legendBottom);
+        RectF legend1Rect = new RectF(bar1Rect.left - 10, legendTop, bar1Rect.right + 10, legendBottom);
+        RectF legend2Rect = new RectF(bar2Rect.left - 10, legendTop, bar2Rect.right + 10, legendBottom);
+        RectF legend3Rect = new RectF(bar3Rect.left - 10, legendTop, bar3Rect.right + 10, legendBottom);
         paint.setColor(Color.GREEN);
         canvas.drawRoundRect(legend1Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
         paint.setColor(Color.RED);
@@ -145,7 +145,7 @@ public class ViewBarChart extends View {
 
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTextSize(Utils.dp2px(11));
+        paint.setTextSize(Utils.dp2px(13));
         canvas.drawText("发射基波", (legend1Rect.left + legend1Rect.right) / 2, (legend1Rect.top + legend1Rect.bottom) / 2 + Utils.dp2px(5), paint);
         canvas.drawText("2次谐波", (legend2Rect.left + legend2Rect.right) / 2, (legend2Rect.top + legend2Rect.bottom) / 2 + Utils.dp2px(5), paint);
         canvas.drawText("3次谐波", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(5), paint);
