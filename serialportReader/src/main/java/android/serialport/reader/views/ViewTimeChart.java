@@ -101,7 +101,7 @@ public class ViewTimeChart extends View {
                     pathRX2.lineTo(x, y1);
                 }
             } else if (dataPackageArrayList.get(i).getWaveType() == 0) {//三次
-                y2 = chartRect.top + chartRect.height() * (1f - dataPackageArrayList.get(i).getWavePower() / MAX_POWER);
+                y2 = chartRect.top + chartRect.height() * (1f - (dataPackageArrayList.get(i).getWavePower() + MainActivity.TH_base2 - MainActivity.TH_base3) / MAX_POWER);
 
                 if (pathRX3.isEmpty()) {
                     pathRX3.moveTo(x, y2);
@@ -121,19 +121,19 @@ public class ViewTimeChart extends View {
         if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
             paint.setColor(Color.RED);
             canvas.drawPath(pathRX2, paint);
-            paint.setColor(Color.GREEN);
+            paint.setColor(Color.BLUE);
             canvas.drawPath(pathBase, paint);
         } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3) {
             paint.setColor(Color.YELLOW);
             canvas.drawPath(pathRX3, paint);
-            paint.setColor(Color.GREEN);
+            paint.setColor(Color.BLUE);
             canvas.drawPath(pathBase, paint);
         } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3) {
             paint.setColor(Color.RED);
             canvas.drawPath(pathRX2, paint);
             paint.setColor(Color.YELLOW);
             canvas.drawPath(pathRX3, paint);
-            paint.setColor(Color.GREEN);
+            paint.setColor(Color.BLUE);
             canvas.drawPath(pathBase, paint);
         } else {
             //do nothing
@@ -191,13 +191,13 @@ public class ViewTimeChart extends View {
         canvas.drawRoundRect(legend1Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
         paint.setColor(Color.YELLOW);
         canvas.drawRoundRect(legend2Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
-        paint.setColor(Color.GREEN);
+        paint.setColor(Color.BLUE);
         canvas.drawRoundRect(legend3Rect, Utils.dp2px(5), Utils.dp2px(5), paint);
 
         paint.setColor(Color.BLACK);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTextSize(Utils.dp2px(13));
-        canvas.drawText("发射基波", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(5), paint);
+        canvas.drawText("基准门限", (legend3Rect.left + legend3Rect.right) / 2, (legend3Rect.top + legend3Rect.bottom) / 2 + Utils.dp2px(5), paint);
         if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 || MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
             paint.setColor(Color.BLACK);
         } else {

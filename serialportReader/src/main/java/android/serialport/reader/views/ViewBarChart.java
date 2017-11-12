@@ -166,17 +166,17 @@ public class ViewBarChart extends View {
         data1 = dataPackage.getSettingPower() / 10f;
         if (dataPackage.getSettingWorkMode() == 3) {//2次3次谐波轮流测
             if (dataPackage.getWaveType() == 0) {
-                data3 = dataPackage.getWavePower() / 100f;
+                data3 = dataPackage.getWavePowerRegulated() / 100f;
             } else if (dataPackage.getWaveType() == 1)
-                data2 = dataPackage.getWavePower() / 100f;
+                data2 = dataPackage.getWavePowerRegulated() / 100f;
         } else if (dataPackage.getSettingWorkMode() == 2) {//仅测3次谐波
             if (dataPackage.getWaveType() == 0) {
-                data3 = dataPackage.getWavePower() / 100f;
+                data3 = dataPackage.getWavePowerRegulated() / 100f;
                 data2 = 0f;
             }
         } else if (dataPackage.getSettingWorkMode() == 1) {//仅测2次谐波
             if (dataPackage.getWaveType() == 1) {
-                data2 = dataPackage.getWavePower() / 100f;
+                data2 = dataPackage.getWavePowerRegulated() / 100f;
                 data3 = 0f;
             }
         } else {//0：射频待机

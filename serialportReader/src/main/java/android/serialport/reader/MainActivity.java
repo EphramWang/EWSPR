@@ -106,6 +106,14 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     private String fileSaveSubDirName;//数据包保存的子文件夹， 每次启动程序根据时间新建一个
 
+    //新增环境噪声学习功能
+    public static final int TH_OFFSET = 1;
+    private boolean isInit = false;//是否初始化参数完成
+    CopyOnWriteArrayList<Integer> power2DbList = new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Integer> power3DbList = new CopyOnWriteArrayList<>();
+    public static int TH_base2 = 50;
+    public static int TH_base3 = 50;
+
     //数据
     public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存
 
@@ -547,8 +555,10 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                     Toast.makeText(MainActivity.this, "灵敏度设置成功", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x82://工作模式设置ACK  0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
                     Toast.makeText(MainActivity.this, "工作模式设置成功", Toast.LENGTH_SHORT).show();
+                    isInit = true;
+                }
                 break;
             case (byte) 0x83://读取电量上报  1-10有效，表示电量格数，10表示电量充足，3以下(包含3)提示低电量
                 if (Utils.getUnsignedByte(commandContent) <= 3)
@@ -610,6 +620,40 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 dataPackages4display.remove(0);
                             }
                             dataPackages4display.add(dataPackage);
+                            //环境噪声学习功能
+                            if (isInit && dataPackage.getWaveType() == 0 && power3DbList.size() < 15) {
+                                power3DbList.add(dataPackage.getWavePower());
+                            } else if (isInit && dataPackage.getWaveType() == 1 && power2DbList.size() < 15) {
+                                power2DbList.add(dataPackage.getWavePower());
+                            }
+                            if (power3DbList.size() >= 15) {
+                                CopyOnWriteArrayList<Integer> list = (CopyOnWriteArrayList<Integer>) power3DbList.clone();
+                                int thBase3Ref = 0;
+                                for (int base3 : list) {
+                                    thBase3Ref += base3;
+                                }
+                                thBase3Ref = thBase3Ref / list.size();
+                                if (thBase3Ref > 60)
+                                    thBase3Ref = 60;
+                                else if (thBase3Ref < 30) {
+                                    thBase3Ref = 30;
+                                }
+                                TH_base3 = thBase3Ref;
+                            }
+                            if (power2DbList.size() >= 15) {
+                                CopyOnWriteArrayList<Integer> list = (CopyOnWriteArrayList<Integer>) power2DbList.clone();
+                                int thBase2Ref = 0;
+                                for (int base2 : list) {
+                                    thBase2Ref += base2;
+                                }
+                                thBase2Ref = thBase2Ref / list.size();
+                                if (thBase2Ref > 60)
+                                    thBase2Ref = 60;
+                                else if (thBase2Ref < 30) {
+                                    thBase2Ref = 30;
+                                }
+                                TH_base2 = thBase2Ref;
+                            }
                             //Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
                             if (alertThread != null) {
                                 int wavePower = dataPackage.getWavePower();
