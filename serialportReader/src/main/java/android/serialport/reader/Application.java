@@ -55,8 +55,8 @@ public class Application extends android.app.Application {
 
             String packageName = getPackageName();
             SharedPreferences sp = getSharedPreferences(packageName + "_preferences", MODE_PRIVATE);
-            String path = sp.getString("DEVICE", "");
-            int baudrate = Integer.decode(sp.getString("BAUDRATE", "-1"));
+            String path = sp.getString("DEVICE", "/dev/ttyS5");
+            int baudrate = Integer.decode(sp.getString("BAUDRATE", "926100"));
 
             MainActivity.filePath = sp.getString("filePath", "/datapack");
             MainActivity.screenshotPath = sp.getString("screenshotPath", "/datapackScreenShot");

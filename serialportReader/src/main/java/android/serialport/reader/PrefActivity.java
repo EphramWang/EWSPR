@@ -150,7 +150,10 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
         String[] entryValues = mSerialPortFinder.getAllDevicesPath();
         devices.setEntries(entries);
         devices.setEntryValues(entryValues);
-        devices.setSummary(devices.getValue());
+        if (devices.getValue().length() > 0)
+            devices.setSummary(devices.getValue());
+        else
+            devices.setSummary("/dev/ttyS5");
         devices.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
@@ -161,7 +164,10 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
 
         // Baud rates
         final ListPreference baudrates =  (ListPreference) findPreference("BAUDRATE");
-        baudrates.setSummary(baudrates.getValue());
+        if (baudrates.getValue().length() > 0)
+            baudrates.setSummary(baudrates.getValue());
+        else
+            baudrates.setSummary("926100");
         baudrates.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
@@ -282,6 +288,8 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                                 sp.edit().putString("datapacksize", "500").apply();
                                 MainActivity.maxDisplayLength = 500;
                                 sp.edit().putString("SYBX", "500").apply();
+                                sp.edit().putString("DEVICE", "/dev/ttyS5").apply();
+                                sp.edit().putString("BAUDRATE", "926100").apply();
 
                                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, MainActivity.mWorkMode)));
                                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, MainActivity.mSensitivity)));
