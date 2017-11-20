@@ -549,15 +549,21 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
             case (byte) 0x80://自检结果上报 0：自检成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "自检成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "自检失败，请重启", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x81://灵敏度设置ACK  0：设置成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "灵敏度设置成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "灵敏度设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x82://工作模式设置ACK  0：设置成功
                 if (Utils.getUnsignedByte(commandContent) == 0) {
                     Toast.makeText(MainActivity.this, "工作模式设置成功", Toast.LENGTH_SHORT).show();
                     isInit = true;
+                } else {
+                    Toast.makeText(MainActivity.this, "工作模式设置失败", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case (byte) 0x83://读取电量上报  1-10有效，表示电量格数，10表示电量充足，3以下(包含3)提示低电量
@@ -568,14 +574,20 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
             case (byte) 0x85://功率设置ACK   0：设置成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "功率设置成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "功率设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x86://数字本振频率设置ACK  0：设置成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "数字本振频率设置成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "数字本振频率设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x87://数字放大增益设置ACK  0：设置成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "数字放大增益设置成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "数字放大增益设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x88://测量数据主动上报,非指令
                 break;
