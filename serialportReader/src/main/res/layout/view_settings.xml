@@ -16,7 +16,8 @@
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/signal_up" />
+            android:src="@drawable/signalup"
+            android:tint="@android:color/white"/>
 
         <ImageView
             android:id="@+id/button_power"
@@ -61,14 +62,16 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/volume_up" />
+            android:src="@drawable/volup"
+            android:tint="@android:color/white"/>
 
         <ImageView
             android:id="@+id/button_left"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:scaleType="fitCenter"
-            android:src="@drawable/volume_down"
+            android:src="@drawable/voldown"
+            android:tint="@android:color/white"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
@@ -88,7 +91,8 @@
             android:layout_centerInParent="true"
             android:layout_centerVertical="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/signal_down" />
+            android:src="@drawable/signaldown"
+            android:tint="@android:color/white"/>
 
         <TextView
             android:id="@+id/tv_bottom_left"
