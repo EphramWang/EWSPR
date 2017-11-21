@@ -53,6 +53,26 @@
         android:entryValues="@array/baudrates_value"
         android:persistent="true" >
     </ListPreference>
+    <EditTextPreference
+        android:key="thbase2"
+        android:title="二次谐波门限设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="thbase3"
+        android:title="三次谐波门限设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="gain2"
+        android:title="二次谐波标定增益设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="gain3"
+        android:title="三次谐波标定增益设置"
+        android:persistent="true">
+    </EditTextPreference>
     <Preference
         android:key="wifi"
         android:title="WiFi设置"/>

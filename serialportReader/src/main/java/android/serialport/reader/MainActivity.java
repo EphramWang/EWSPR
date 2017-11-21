@@ -113,6 +113,8 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     CopyOnWriteArrayList<Integer> power3DbList = new CopyOnWriteArrayList<>();
     public static int TH_base2 = 50;
     public static int TH_base3 = 50;
+    public static float Gain2 = 1.0f;//二次谐波标定增益设置
+    public static float Gain3 = 1.0f;//三次谐波标定增益设置
 
     //数据
     public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存

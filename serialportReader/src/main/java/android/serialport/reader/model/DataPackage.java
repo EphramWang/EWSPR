@@ -125,7 +125,8 @@ public class DataPackage {
     public int getWavePowerRegulated() {
         int power = getWavePower();
         int thBase = getWaveType() == 0 ? MainActivity.TH_base3 : MainActivity.TH_base2;
-        power = 3 * (power - thBase) + 10;
+        float gain = getWaveType() == 0 ? MainActivity.Gain3 : MainActivity.Gain2;
+        power = (int) (3 * (power - thBase) * gain + 10);
         if (power < 5)
             power = 5;
         else if (power > 100)

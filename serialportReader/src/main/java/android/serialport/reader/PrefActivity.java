@@ -175,6 +175,71 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
             }
         });
 
+        //二次谐波门限设置
+        final EditTextPreference thbase2 = (EditTextPreference) findPreference("thbase2");
+        thbase2.setSummary(MainActivity.TH_base2 + "");
+        thbase2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int thbase = Integer.parseInt((String) newValue);
+                if (thbase >= 30 && thbase <= 60) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.TH_base2 = thbase;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        //3次谐波门限设置
+        final EditTextPreference thbase3 = (EditTextPreference) findPreference("thbase3");
+        thbase3.setSummary(MainActivity.TH_base3 + "");
+        thbase3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int thbase = Integer.parseInt((String) newValue);
+                if (thbase >= 30 && thbase <= 60) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.TH_base3 = thbase;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        //二次谐波标定增益设置
+        final EditTextPreference gain2 = (EditTextPreference) findPreference("gain2");
+        gain2.setSummary(gain2.getText() != null ? gain2.getText() : "1.00");
+        gain2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                float gain = Float.parseFloat((String) newValue);
+                if (gain >= 0.01f && gain <= 1.0f) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.Gain2 = gain;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        //3次谐波门限设置
+        final EditTextPreference gain3 = (EditTextPreference) findPreference("gain3");
+        gain3.setSummary(gain3.getText() != null ? gain3.getText() : "1.00");
+        gain3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                float gain = Float.parseFloat((String) newValue);
+                if (gain >= 0.01f && gain <= 1.0f) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.Gain3 = gain;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
         //wifi
         final Preference wifiPref = findPreference("wifi");
         wifiPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
