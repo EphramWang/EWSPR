@@ -187,6 +187,10 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
+        if (saveDataThread != null)
+            saveDataThread.interrupt();
+        if (readSerialPortThread != null)
+            readSerialPortThread.interrupt();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
@@ -599,7 +603,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     class ReadSerialPortThread extends Thread {
         @Override
         public void run() {
-            while (true) {
+            while (!isInterrupted()) {
                 try {
                     ReceivedData receivedData = receivedDataLinkedBlockingQueue.take();
                     if (receivedData.size == DataConstants.COMMAND_FRAME_LENGTH
@@ -704,7 +708,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     class SaveDataPackToStorageThread extends Thread {
         @Override
         public void run() {
-            while (true) {
+            while (!isInterrupted()) {
                 if (dataPackageLinkedBlockingQueue.size() > datapackNumToSaveInFile) {
                     //保存到外部
                     ArrayList<DataPackage> listToBeSaved = new ArrayList<>(datapackNumToSaveInFile);
