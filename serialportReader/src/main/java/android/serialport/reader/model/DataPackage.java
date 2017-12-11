@@ -123,10 +123,12 @@ public class DataPackage {
     }
 
     public int getWavePowerRegulated() {
-        int power = getWavePower();
+        //int power = getWavePower();
+        //int power = getWaveType() == 0 ? MainActivity.power_base3_reshape : MainActivity.power_base2_reshape;
+        int power = getWaveType() == 0 ? (int)MainActivity.power_filt_base3_cur : (int)MainActivity.power_filt_base2_cur;
         int thBase = getWaveType() == 0 ? MainActivity.TH_base3 : MainActivity.TH_base2;
         float gain = getWaveType() == 0 ? MainActivity.Gain3 : MainActivity.Gain2;
-        power = (int) (3 * (power - thBase) * gain + 10);
+        power = (int) (4 * (power - thBase) * gain + 10);
         if (power < 5)
             power = 5;
         else if (power > 100)

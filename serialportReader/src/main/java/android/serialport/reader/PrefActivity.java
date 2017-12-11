@@ -18,6 +18,8 @@ import android.serialport.reader.utils.DataConstants;
 import android.serialport.reader.utils.TimePickerDialog;
 import android.serialport.reader.utils.Utils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -105,7 +107,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
         });
 
         //数字放大增益设置
-        final ListPreference SZFDZY = (ListPreference) findPreference("SZFDZY");
+        /*final ListPreference SZFDZY = (ListPreference) findPreference("SZFDZY");
         SZFDZY.setSummary(SZFDZY.getValue());
         SZFDZY.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -116,10 +118,10 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                 MainActivity.mSZFDZY = content;
                 return true;
             }
-        });
+        });*/
 
         //数字本振频率设置
-        final EditTextPreference SZBZPL = (EditTextPreference) findPreference("SZBZPL");
+        /*final EditTextPreference SZBZPL = (EditTextPreference) findPreference("SZBZPL");
         SZBZPL.setSummary(SZBZPL.getText());
         SZBZPL.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -130,7 +132,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                 MainActivity.mSZBZPL = content;
                 return true;
             }
-        });
+        });*/
 
         //SYBX
         final ListPreference SYBX = (ListPreference) findPreference("SYBX");
@@ -144,8 +146,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
             }
         });
 
-        // Devices
-        final ListPreference devices = (ListPreference) findPreference("DEVICE");
+        /*final ListPreference devices = (ListPreference) findPreference("DEVICE");
         String[] entries = mSerialPortFinder.getAllDevices();
         String[] entryValues = mSerialPortFinder.getAllDevicesPath();
         devices.setEntries(entries);
@@ -159,11 +160,9 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                 preference.setSummary((String) newValue);
                 return true;
             }
-        });
+        });*/
 
-
-        // Baud rates
-        final ListPreference baudrates =  (ListPreference) findPreference("BAUDRATE");
+        /*final ListPreference baudrates =  (ListPreference) findPreference("BAUDRATE");
         if (baudrates.getValue().length() > 0)
             baudrates.setSummary(baudrates.getValue());
         else
@@ -173,16 +172,16 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                 preference.setSummary((String) newValue);
                 return true;
             }
-        });
+        });*/
 
         //二次谐波门限设置
-        final EditTextPreference thbase2 = (EditTextPreference) findPreference("thbase2");
+        /*final EditTextPreference thbase2 = (EditTextPreference) findPreference("thbase2");
         thbase2.setSummary(MainActivity.TH_base2 + "");
         thbase2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int thbase = Integer.parseInt((String) newValue);
-                if (thbase >= 30 && thbase <= 60) {
+                if (thbase >= 15 && thbase <= 60) {
                     preference.setSummary((String) newValue);
                     MainActivity.TH_base2 = thbase;
                     return true;
@@ -190,9 +189,9 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                     return false;
                 }
             }
-        });
+        });*/
         //3次谐波门限设置
-        final EditTextPreference thbase3 = (EditTextPreference) findPreference("thbase3");
+        /*final EditTextPreference thbase3 = (EditTextPreference) findPreference("thbase3");
         thbase3.setSummary(MainActivity.TH_base3 + "");
         thbase3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -206,15 +205,15 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                     return false;
                 }
             }
-        });
+        });*/
         //二次谐波标定增益设置
-        final EditTextPreference gain2 = (EditTextPreference) findPreference("gain2");
+        /*final EditTextPreference gain2 = (EditTextPreference) findPreference("gain2");
         gain2.setSummary(gain2.getText() != null ? gain2.getText() : "1.00");
         gain2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 float gain = Float.parseFloat((String) newValue);
-                if (gain >= 0.01f && gain <= 1.0f) {
+                if (gain >= 0.5f && gain <= 1.0f) {
                     preference.setSummary((String) newValue);
                     MainActivity.Gain2 = gain;
                     return true;
@@ -222,15 +221,15 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                     return false;
                 }
             }
-        });
-        //3次谐波门限设置
-        final EditTextPreference gain3 = (EditTextPreference) findPreference("gain3");
-        gain3.setSummary(gain3.getText() != null ? gain3.getText() : "1.00");
+        });*/
+        //3次谐波标定增益设置
+        /*final EditTextPreference gain3 = (EditTextPreference) findPreference("gain3");
+        gain3.setSummary(gain3.getText() != null ? gain3.getText() : "0.8");
         gain3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 float gain = Float.parseFloat((String) newValue);
-                if (gain >= 0.01f && gain <= 1.0f) {
+                if (gain >= 0.5f && gain <= 1.0f) {
                     preference.setSummary((String) newValue);
                     MainActivity.Gain3 = gain;
                     return true;
@@ -238,7 +237,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                     return false;
                 }
             }
-        });
+        });*/
 
         //wifi
         final Preference wifiPref = findPreference("wifi");
@@ -251,7 +250,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
         });
 
         //sd
-        final Preference sdPref = findPreference("sd");
+        /**final Preference sdPref = findPreference("sd");
         sdPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -259,7 +258,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                 startActivity(new Intent(Settings.ACTION_MEMORY_CARD_SETTINGS));
                 return false;
             }
-        });
+        });*/
 
         //filePath
         final EditTextPreference filePath = (EditTextPreference) findPreference("filePath");
@@ -301,7 +300,7 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
         });
 
         //cleardata
-        final Preference cleardata = findPreference("sd");
+        final Preference cleardata = findPreference("cleardata");
         cleardata.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -316,14 +315,14 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
 
 
         // checksum
-        final ListPreference checksum =  (ListPreference) findPreference("checksum");
+        /*final ListPreference checksum =  (ListPreference) findPreference("checksum");
         checksum.setSummary(checksum.getEntry());
         checksum.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 return true;
             }
-        });
+        });*/
 
         //restoreDefalutSettings
         final Preference restoreDefalutSettings = findPreference("restoreDefalutSettings");
@@ -353,8 +352,8 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                                 sp.edit().putString("datapacksize", "500").apply();
                                 MainActivity.maxDisplayLength = 500;
                                 sp.edit().putString("SYBX", "500").apply();
-                                sp.edit().putString("DEVICE", "/dev/ttyS5").apply();
-                                sp.edit().putString("BAUDRATE", "926100").apply();
+                                //sp.edit().putString("DEVICE", "/dev/ttyS5").apply();
+                                //sp.edit().putString("BAUDRATE", "921600").apply();
 
                                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, MainActivity.mWorkMode)));
                                 EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, MainActivity.mSensitivity)));
@@ -365,6 +364,34 @@ public class PrefActivity extends PreferenceActivity  implements TimePickerDialo
                                 finish();
                             }
                         }).setNegativeButton("取消", null).show();
+                return true;
+            }
+        });
+
+        //advancedSettings
+        final Preference advancedSettings = findPreference("advancedSettings");
+        advancedSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final EditText et = new EditText(PrefActivity.this);
+
+                new AlertDialog.Builder(PrefActivity.this).setTitle("请输入密码")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setView(et)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String input = et.getText().toString();
+                                if (!input.equals("cetc50wt")) {
+                                    Toast.makeText(getApplicationContext(), "密码错误！", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Intent intent = new Intent();
+                                    intent.setClass(PrefActivity.this, Pref2Activity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
                 return true;
             }
         });

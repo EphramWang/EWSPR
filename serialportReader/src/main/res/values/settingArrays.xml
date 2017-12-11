@@ -3,9 +3,9 @@
 
     <string-array name="workmode_name">
         <item>0：射频待机</item>
-        <item>1：仅测2次谐波</item>
-        <item>2：仅测3次谐波</item>
-        <item>3：2次3次谐波轮流测</item>
+        <item>1：2次谐波</item>
+        <item>2：3次谐波</item>
+        <item>3：2、3次谐波</item>
     </string-array>
     <string-array name="workmode_value">
         <item>0</item>

@@ -52,14 +52,14 @@ public class ViewFrequencyChart extends View {
     }
 
     private void computeRect() {
-        float everyHeight = mainRect.height() / 5;
-        float topBottomMargin = everyHeight / 2;
+        float everyHeight = mainRect.height() / 10;
+        float topBottomMargin = everyHeight / 1;
         topRect = new RectF(mainRect.left, mainRect.top + topBottomMargin, mainRect.right, mainRect.top + topBottomMargin + everyHeight);
         xAxisRect = new RectF(mainRect.left + mainRect.width() / 5, topRect.bottom, mainRect.right, topRect.bottom + everyHeight);
-        legendRect1 = new RectF(mainRect.left, xAxisRect.bottom, mainRect.left + mainRect.width() / 5, xAxisRect.bottom + everyHeight);
-        chartRect1 = new RectF(mainRect.left + mainRect.width() / 5, xAxisRect.bottom, mainRect.right, xAxisRect.bottom + everyHeight - 3);
-        legendRect2 = new RectF(mainRect.left, legendRect1.bottom, mainRect.left + mainRect.width() / 5, legendRect1.bottom + everyHeight);
-        chartRect2 = new RectF(mainRect.left + mainRect.width() / 5, chartRect1.bottom + 3, mainRect.right, chartRect1.bottom + everyHeight);
+        legendRect1 = new RectF(mainRect.left, xAxisRect.bottom, mainRect.left + mainRect.width() / 5, xAxisRect.bottom + everyHeight * 3);
+        chartRect1 = new RectF(mainRect.left + mainRect.width() / 5, xAxisRect.bottom, mainRect.right, xAxisRect.bottom + everyHeight * 3 - 3);
+        legendRect2 = new RectF(mainRect.left, legendRect1.bottom, mainRect.left + mainRect.width() / 5, legendRect1.bottom + everyHeight * 3);
+        chartRect2 = new RectF(mainRect.left + mainRect.width() / 5, chartRect1.bottom + 3, mainRect.right, chartRect1.bottom + everyHeight * 3);
     }
 
     @Override

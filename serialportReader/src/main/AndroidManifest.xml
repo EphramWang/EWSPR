@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name="android.serialport.reader.PrefActivity"></activity>
+        <activity android:name="android.serialport.reader.Pref2Activity"></activity>
         <activity android:name="android.serialport.reader.test.MainMenu"></activity>
         <activity android:name="android.serialport.reader.test.SerialPortPreferences"></activity>
         <activity android:name="android.serialport.reader.test.ConsoleActivity"></activity>

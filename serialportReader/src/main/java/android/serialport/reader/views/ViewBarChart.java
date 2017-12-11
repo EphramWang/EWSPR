@@ -153,15 +153,19 @@ public class ViewBarChart extends View {
     }
 
     private void drawBars(Canvas canvas) {
-        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = ((MainActivity)context).dataPackages4display;
+        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = (CopyOnWriteArrayList<DataPackage>) ((MainActivity)context).dataPackages4display.clone();
         DataPackage dataPackage;
         if (dataPackageArrayList.size() < 1 && cacheDatapackage == null)
             return;
         else if (dataPackageArrayList.size() < 1)
             dataPackage = cacheDatapackage;
         else {
-            dataPackage = dataPackageArrayList.get(dataPackageArrayList.size() - 1);
-            cacheDatapackage = dataPackage;
+            try {
+                dataPackage = dataPackageArrayList.get(dataPackageArrayList.size() - 1);
+                cacheDatapackage = dataPackage;
+            } catch (Exception e) {
+                return;
+            }
         }
         data1 = dataPackage.getSettingPower() / 10f;
         if (dataPackage.getSettingWorkMode() == 3) {//2次3次谐波轮流测

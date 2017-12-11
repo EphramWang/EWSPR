@@ -71,22 +71,86 @@ public class ViewTimeChart extends View {
     private void drawTimeChart(Canvas canvas) {
 //        ArrayList<DataPackage> dataPackageArrayList = new ArrayList<>();
 //        ((MainActivity)context).dataPackageLinkedBlockingQueue.drainTo(dataPackageArrayList);
-        CopyOnWriteArrayList<DataPackage> dataPackageArrayList = (CopyOnWriteArrayList<DataPackage>) ((MainActivity)context).dataPackages4display.clone();
-        if (dataPackageArrayList.size() < 1)
-            return;
+        //CopyOnWriteArrayList<DataPackage> dataPackageArrayList = (CopyOnWriteArrayList<DataPackage>) ((MainActivity)context).dataPackages4display.clone();
+        CopyOnWriteArrayList<Float> power2DbFiltList4Disp = (CopyOnWriteArrayList<Float>) ((MainActivity)context).power2DbFiltList.clone();
+        CopyOnWriteArrayList<Float> power3DbFiltList4Disp = (CopyOnWriteArrayList<Float>) ((MainActivity)context).power3DbFiltList.clone();
+
 
         Path pathRX2 = new Path();
         Path pathRX3 = new Path();
         Path pathBase = new Path();
-        for (int i = dataPackageArrayList.size() - 1; i >= 0; i--) {
+
+        int i = 0;
+        float x = 0;
+        float y = 0;
+        float power_temp = 0;
+        int dataCount = MainActivity.maxDisplayLength;
+        int enb_rx2 = 1;
+        int enb_rx3 = 1;
+        if( MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2 )
+            enb_rx3 = 0;
+        else if( MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3 )
+            enb_rx2 = 0;
+
+        //绘制二次谐波
+        if(enb_rx2==1) {
+            if (power2DbFiltList4Disp.size() < 1)
+                return;
+            for (i = power2DbFiltList4Disp.size() - 1; i >= 0; i--) {
+                x = (dataCount - (power2DbFiltList4Disp.size() - 1) + i) * chartRect.width() / dataCount + chartRect.left;
+                if (x < chartRect.left)
+                    break;
+                power_temp = 2f + 3f * MainActivity.Gain2 *(power2DbFiltList4Disp.get(i) - MainActivity.TH_base2);
+                if (power_temp <= 2f)
+                    power_temp = 2f;
+                else if (power_temp > 98f)
+                    power_temp = 98f;
+
+                y = chartRect.top + chartRect.height() * (1f - power_temp / MAX_POWER);
+
+                if (pathRX2.isEmpty()) {
+                    pathRX2.moveTo(x, y);
+                } else {
+                    pathRX2.lineTo(x, y);
+                }
+            }
+        }
+
+        //绘制三次谐波
+        if(enb_rx3==1) {
+            if (power3DbFiltList4Disp.size() < 1)
+                return;
+            for (i = power3DbFiltList4Disp.size() - 1; i >= 0; i--) {
+                x = (dataCount - (power3DbFiltList4Disp.size() - 1) + i) * chartRect.width() / dataCount + chartRect.left;
+                if (x < chartRect.left)
+                    break;
+                power_temp = 2f + 3f * MainActivity.Gain3 * (power3DbFiltList4Disp.get(i) - MainActivity.TH_base3);
+                if (power_temp <= 2f)
+                    power_temp = 2f;
+                else if (power_temp > 98f)
+                    power_temp = 98f;
+
+                y = chartRect.top + chartRect.height() * (1f - power_temp / MAX_POWER);
+
+                if (pathRX3.isEmpty()) {
+                    pathRX3.moveTo(x, y);
+                } else {
+                    pathRX3.lineTo(x, y);
+                }
+            }
+        }
+
+
+        /*for (int i = dataPackageArrayList.size() - 1; i >= 0; i--) {
             int dataCount = MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3 ? MainActivity.maxDisplayLength * 2 : MainActivity.maxDisplayLength;
             float x = (dataCount - (dataPackageArrayList.size() - 1) + i) * chartRect.width() / dataCount + chartRect.left;
             if (x < chartRect.left)
                 break;
 
             float y1 = 0, y2 = 0;
-            float y3 = chartRect.top + chartRect.height() * (1f - dataPackageArrayList.get(i).getSettingPower() / 10f);
-            data1 = dataPackageArrayList.get(i).getSettingPower() / 10f;
+            //float y3 = chartRect.top + chartRect.height() * (1f - dataPackageArrayList.get(i).getSettingPower() / 10f);
+            float y3 = chartRect.top + chartRect.height() * (1f -MainActivity.TH_base2 / MAX_POWER);
+
             if (pathBase.isEmpty()) {
                 pathBase.moveTo(x, y3);
             } else {
@@ -109,11 +173,12 @@ public class ViewTimeChart extends View {
                     pathRX3.lineTo(x, y2);
                 }
             }
-        }
+        }*/
 
         //draw bar
         float margin = Utils.dp2px(13);
         paint.setColor(Color.GREEN);
+        data1 = MainActivity.mPower / 10f;
         canvas.drawRoundRect(new RectF(barRect.left + margin, barRect.top + (barRect.height() - margin * 2) * (1 - data1) + margin, barRect.right - margin, barRect.bottom - margin), Utils.dp2px(10), Utils.dp2px(10), paint);
 
         //draw time line
@@ -121,20 +186,20 @@ public class ViewTimeChart extends View {
         if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX2) {
             paint.setColor(Color.RED);
             canvas.drawPath(pathRX2, paint);
-            paint.setColor(Color.BLUE);
-            canvas.drawPath(pathBase, paint);
+            //paint.setColor(Color.BLUE);
+            //canvas.drawPath(pathBase, paint);
         } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_ONLY_RX3) {
             paint.setColor(Color.YELLOW);
             canvas.drawPath(pathRX3, paint);
-            paint.setColor(Color.BLUE);
-            canvas.drawPath(pathBase, paint);
+            //paint.setColor(Color.BLUE);
+            //canvas.drawPath(pathBase, paint);
         } else if (MainActivity.mWorkMode == MainActivity.WORK_MODE_BOTH_RX2_RX3) {
             paint.setColor(Color.RED);
             canvas.drawPath(pathRX2, paint);
             paint.setColor(Color.YELLOW);
             canvas.drawPath(pathRX3, paint);
-            paint.setColor(Color.BLUE);
-            canvas.drawPath(pathBase, paint);
+            //paint.setColor(Color.BLUE);
+            //canvas.drawPath(pathBase, paint);
         } else {
             //do nothing
         }
