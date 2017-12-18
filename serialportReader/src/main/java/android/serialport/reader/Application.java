@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.serialport.SerialPort;
 import android.serialport.SerialPortFinder;
+import android.serialport.reader.utils.CrashHandler;
 
 import com.yanzhenjie.andserver.server.CoreService;
 
@@ -43,6 +44,9 @@ public class Application extends android.app.Application {
 
         // AndServer run in the service.
         startService(new Intent(this, CoreService.class));
+
+        // 注册crashHandler
+        CrashHandler.getInstance().init();
     }
 
     public SerialPortFinder mSerialPortFinder = new SerialPortFinder();
