@@ -1,6 +1,11 @@
 package android.serialport.reader;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.EditTextPreference;
@@ -10,21 +15,27 @@ import android.preference.PreferenceActivity;
 import android.provider.Settings;
 import android.serialport.SerialPortFinder;
 import android.serialport.reader.utils.DataConstants;
+import android.serialport.reader.utils.TimePickerDialog;
 import android.serialport.reader.utils.Utils;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
+import java.util.Calendar;
 
 /**
  * Created by ning on 17/9/13.
  */
 
-public class PrefActivity extends PreferenceActivity {
+public class PrefActivity extends PreferenceActivity  implements TimePickerDialog.TimePickerDialogInterface  {
 
     private Application mApplication;
     private SerialPortFinder mSerialPortFinder;
+
+    TimePickerDialog timePickerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +107,7 @@ public class PrefActivity extends PreferenceActivity {
         });
 
         //数字放大增益设置
-        final ListPreference SZFDZY = (ListPreference) findPreference("SZFDZY");
+        /*final ListPreference SZFDZY = (ListPreference) findPreference("SZFDZY");
         SZFDZY.setSummary(SZFDZY.getValue());
         SZFDZY.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -107,10 +118,10 @@ public class PrefActivity extends PreferenceActivity {
                 MainActivity.mSZFDZY = content;
                 return true;
             }
-        });
+        });*/
 
         //数字本振频率设置
-        final EditTextPreference SZBZPL = (EditTextPreference) findPreference("SZBZPL");
+        /*final EditTextPreference SZBZPL = (EditTextPreference) findPreference("SZBZPL");
         SZBZPL.setSummary(SZBZPL.getText());
         SZBZPL.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -121,7 +132,7 @@ public class PrefActivity extends PreferenceActivity {
                 MainActivity.mSZBZPL = content;
                 return true;
             }
-        });
+        });*/
 
         //SYBX
         final ListPreference SYBX = (ListPreference) findPreference("SYBX");
@@ -135,30 +146,98 @@ public class PrefActivity extends PreferenceActivity {
             }
         });
 
-        // Devices
-        final ListPreference devices = (ListPreference) findPreference("DEVICE");
+        /*final ListPreference devices = (ListPreference) findPreference("DEVICE");
         String[] entries = mSerialPortFinder.getAllDevices();
         String[] entryValues = mSerialPortFinder.getAllDevicesPath();
         devices.setEntries(entries);
         devices.setEntryValues(entryValues);
-        devices.setSummary(devices.getValue());
+        if (devices.getValue().length() > 0)
+            devices.setSummary(devices.getValue());
+        else
+            devices.setSummary("/dev/ttyS5");
         devices.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 return true;
             }
-        });
+        });*/
 
-
-        // Baud rates
-        final ListPreference baudrates =  (ListPreference) findPreference("BAUDRATE");
-        baudrates.setSummary(baudrates.getValue());
+        /*final ListPreference baudrates =  (ListPreference) findPreference("BAUDRATE");
+        if (baudrates.getValue().length() > 0)
+            baudrates.setSummary(baudrates.getValue());
+        else
+            baudrates.setSummary("926100");
         baudrates.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 return true;
             }
-        });
+        });*/
+
+        //二次谐波门限设置
+        /*final EditTextPreference thbase2 = (EditTextPreference) findPreference("thbase2");
+        thbase2.setSummary(MainActivity.TH_base2 + "");
+        thbase2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int thbase = Integer.parseInt((String) newValue);
+                if (thbase >= 15 && thbase <= 60) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.TH_base2 = thbase;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
+        //3次谐波门限设置
+        /*final EditTextPreference thbase3 = (EditTextPreference) findPreference("thbase3");
+        thbase3.setSummary(MainActivity.TH_base3 + "");
+        thbase3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                int thbase = Integer.parseInt((String) newValue);
+                if (thbase >= 30 && thbase <= 60) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.TH_base3 = thbase;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
+        //二次谐波标定增益设置
+        /*final EditTextPreference gain2 = (EditTextPreference) findPreference("gain2");
+        gain2.setSummary(gain2.getText() != null ? gain2.getText() : "1.00");
+        gain2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                float gain = Float.parseFloat((String) newValue);
+                if (gain >= 0.5f && gain <= 1.0f) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.Gain2 = gain;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
+        //3次谐波标定增益设置
+        /*final EditTextPreference gain3 = (EditTextPreference) findPreference("gain3");
+        gain3.setSummary(gain3.getText() != null ? gain3.getText() : "0.8");
+        gain3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                float gain = Float.parseFloat((String) newValue);
+                if (gain >= 0.5f && gain <= 1.0f) {
+                    preference.setSummary((String) newValue);
+                    MainActivity.Gain3 = gain;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
 
         //wifi
         final Preference wifiPref = findPreference("wifi");
@@ -171,7 +250,7 @@ public class PrefActivity extends PreferenceActivity {
         });
 
         //sd
-        final Preference sdPref = findPreference("sd");
+        /**final Preference sdPref = findPreference("sd");
         sdPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -179,7 +258,7 @@ public class PrefActivity extends PreferenceActivity {
                 startActivity(new Intent(Settings.ACTION_MEMORY_CARD_SETTINGS));
                 return false;
             }
-        });
+        });*/
 
         //filePath
         final EditTextPreference filePath = (EditTextPreference) findPreference("filePath");
@@ -221,7 +300,7 @@ public class PrefActivity extends PreferenceActivity {
         });
 
         //cleardata
-        final Preference cleardata = findPreference("sd");
+        final Preference cleardata = findPreference("cleardata");
         cleardata.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
@@ -236,13 +315,119 @@ public class PrefActivity extends PreferenceActivity {
 
 
         // checksum
-        final ListPreference checksum =  (ListPreference) findPreference("checksum");
+        /*final ListPreference checksum =  (ListPreference) findPreference("checksum");
         checksum.setSummary(checksum.getEntry());
         checksum.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 preference.setSummary((String) newValue);
                 return true;
             }
+        });*/
+
+        //restoreDefalutSettings
+        final Preference restoreDefalutSettings = findPreference("restoreDefalutSettings");
+        restoreDefalutSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new AlertDialog.Builder(PrefActivity.this).setTitle("恢复出厂设置").setMessage("确定吗？").
+                        setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferences sp = getSharedPreferences(getPackageName() + "_preferences", MODE_PRIVATE);
+                                MainActivity.mWorkMode = MainActivity.WORK_MODE_BOTH_RX2_RX3;
+                                sp.edit().putString("WORKMODE", "3").apply();
+                                MainActivity.mSensitivity = 0x05;
+                                sp.edit().putString("SENSITIVITY", "5").apply();
+                                MainActivity.mPower = 0x05;
+                                sp.edit().putString("POWER", "5").apply();
+                                MainActivity.mSZBZPL = 0x00;
+                                sp.edit().putString("SZBZPL", "0").apply();
+                                MainActivity.mSZFDZY = 0x00;
+                                sp.edit().putString("SZFDZY", "0").apply();
+                                MainActivity.filePath = "/datapack";
+                                sp.edit().putString("filePath", "/datapack").apply();
+                                MainActivity.screenshotPath = "/datapackScreenShot";
+                                sp.edit().putString("screenshotPath", "/datapackScreenShot").apply();
+                                MainActivity.datapackNumToSaveInFile = 500;
+                                sp.edit().putString("datapacksize", "500").apply();
+                                MainActivity.maxDisplayLength = 500;
+                                sp.edit().putString("SYBX", "500").apply();
+                                //sp.edit().putString("DEVICE", "/dev/ttyS5").apply();
+                                //sp.edit().putString("BAUDRATE", "921600").apply();
+
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, MainActivity.mWorkMode)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, MainActivity.mSensitivity)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, MainActivity.mPower)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, MainActivity.mSZBZPL)));
+                                EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, MainActivity.mSZFDZY)));
+
+                                finish();
+                            }
+                        }).setNegativeButton("取消", null).show();
+                return true;
+            }
         });
+
+        //advancedSettings
+        final Preference advancedSettings = findPreference("advancedSettings");
+        advancedSettings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                final EditText et = new EditText(PrefActivity.this);
+
+                new AlertDialog.Builder(PrefActivity.this).setTitle("请输入密码")
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setView(et)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                String input = et.getText().toString();
+                                if (!input.equals("cetc50wt")) {
+                                    Toast.makeText(getApplicationContext(), "密码错误！", Toast.LENGTH_LONG).show();
+                                } else {
+                                    Intent intent = new Intent();
+                                    intent.setClass(PrefActivity.this, Pref2Activity.class);
+                                    startActivity(intent);
+                                }
+                            }
+                        })
+                        .setNegativeButton("取消", null)
+                        .show();
+                return true;
+            }
+        });
+
+
+        //datetime
+        final Preference datetime = findPreference("datetime");
+        datetime.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+//                timePickerDialog = new TimePickerDialog(PrefActivity.this);
+//                timePickerDialog.showDateAndTimePickerDialog();
+
+                startActivity(new Intent(Settings.ACTION_DATE_SETTINGS));
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public void positiveListener() {
+//        Calendar c = Calendar.getInstance();
+//        int hour = timePickerDialog.getHour();
+//        int minute = timePickerDialog.getMinute();
+//        c.set(timePickerDialog.getYear(), timePickerDialog.getMonth(), timePickerDialog.getDay(),hour, minute);
+//
+//        long when = c.getTimeInMillis();
+//
+//        if(when / 1000 < Integer.MAX_VALUE){
+//            ((AlarmManager)PrefActivity.this.getSystemService(Context.ALARM_SERVICE)).setTime(when);
+//        }
+
+    }
+
+    @Override
+    public void negativeListener() {
+
     }
 }

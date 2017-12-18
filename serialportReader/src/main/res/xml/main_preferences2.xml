@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android" android:title="设置">
+    <EditTextPreference
+        android:key="SZBZPL"
+        android:title="数字本振频率设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <ListPreference
+        android:key="SZFDZY"
+        android:title="数字放大增益设置"
+        android:entries="@array/szfdzy_name"
+        android:entryValues="@array/szfdzy_value"
+        android:persistent="true">
+    </ListPreference>
+
+    <EditTextPreference
+        android:key="thbase2"
+        android:title="二次谐波门限设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="thbase3"
+        android:title="三次谐波门限设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="gain2"
+        android:title="二次谐波标定增益设置"
+        android:persistent="true">
+    </EditTextPreference>
+    <EditTextPreference
+        android:key="gain3"
+        android:title="三次谐波标定增益设置"
+        android:persistent="true">
+    </EditTextPreference>
+
+    <!--<ListPreference-->
+    <!--android:key="DEVICE"-->
+    <!--android:title="Device"-->
+    <!--android:persistent="true">-->
+    <!--</ListPreference>-->
+    <!--<ListPreference-->
+    <!--android:key="BAUDRATE"-->
+    <!--android:title="Baud rate"-->
+    <!--android:entries="@array/baudrates_name"-->
+    <!--android:entryValues="@array/baudrates_value"-->
+    <!--android:persistent="true" >-->
+    <!--</ListPreference>-->
+</PreferenceScreen>

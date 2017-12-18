@@ -92,7 +92,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     //系统的一些参数
     public static byte mSensitivity = 0x05;//灵敏度设置
     public static byte mWorkMode = WORK_MODE_BOTH_RX2_RX3;//工作状态
-    public static byte mPower = 0x00;//功率 发射基波 uint8
+    public static byte mPower = 0x05;//功率 发射基波 uint8
     public static byte mSZBZPL = 0x00;//数字本振频率
     public static byte mSZFDZY = 0x00;//数字放大增益
 
@@ -106,15 +106,48 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     private String fileSaveSubDirName;//数据包保存的子文件夹， 每次启动程序根据时间新建一个
 
+    //新增环境噪声学习功能
+    public static final int TH_OFFSET = 2;
+    private boolean isInit = false;//是否初始化参数完成
+    private boolean isInitWorkMode = false;//是否初始化参数
+    private boolean isInitSensitivity = false;//是否初始化参数
+    private boolean isInitPower = false;//是否初始化参数
+    private boolean isInitSZBZPL = false;//是否初始化参数
+    private boolean isInitSZFDZY = false;//是否初始化参数
+    CopyOnWriteArrayList<Integer> power2DbList = new CopyOnWriteArrayList<>();
+    CopyOnWriteArrayList<Integer> power3DbList = new CopyOnWriteArrayList<>();
+    public static int TH_base2 = 50;
+    public static int TH_base3 = 50;
+    public static float Gain2 = 1.0f;//二次谐波标定增益设置
+    public static float Gain3 = 1.0f;//三次谐波标定增益设置
+    public static boolean isThReady = false;//门限是否已经获取
+
+    //新增整形和滤波功能
+    public CopyOnWriteArrayList<Integer> power2DbReshapeList = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<Integer> power3DbReshapeList = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<Float> power2DbFiltList = new CopyOnWriteArrayList<>();
+    public CopyOnWriteArrayList<Float> power3DbFiltList = new CopyOnWriteArrayList<>();
+    public static int power_base2_old = 0;
+    public static int power_base3_old = 0;
+    public int power_base2_cur = 0;
+    public int power_base3_cur = 0;
+    public static int power_base2_reshape = 0;
+    public static int power_base3_reshape = 0;
+    public static float power_filt_base2_old = 0;
+    public static float power_filt_base3_old = 0;
+    public static float power_filt_base2_cur = 0;
+    public static float power_filt_base3_cur = 0;
+
     //数据
     public CopyOnWriteArrayList<DataPackage> dataPackages4display = new CopyOnWriteArrayList<>();//显示的缓存
 
     public LinkedBlockingQueue<ReceivedData> receivedDataLinkedBlockingQueue = new LinkedBlockingQueue<>();//读取到的串口数据缓冲区
     public LinkedBlockingQueue<DataPackage> dataPackageLinkedBlockingQueue = new LinkedBlockingQueue<>();//读取到的数据
 
-
     ReadSerialPortThread readSerialPortThread;
     SaveDataPackToStorageThread saveDataThread;
+
+    InitParamsThread initParamsThread;
 
     AlertThread alertThread;
 
@@ -158,18 +191,20 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
         llCenterLayout.addView(llMainView);
 
+        EventBus.getDefault().register(this);
+
         setCurrentTime();
+
+        initParams();
+        initParamsThread = new InitParamsThread();
+        initParamsThread.start();
 
         readSerialPortThread = new ReadSerialPortThread();
         readSerialPortThread.start();
         saveDataThread = new SaveDataPackToStorageThread();
         saveDataThread.start();
 
-        EventBus.getDefault().register(this);
-
         timer.schedule(timerTask, 10000, 10000);
-
-        initParams();
 
         alertThread = new AlertThread();
         alertThread.start();
@@ -177,6 +212,26 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
     @Override
     protected void onDestroy() {
+        try {
+            if (timer != null) {
+                timer.cancel();
+                timer = null;
+            }
+        } catch (Exception e) {
+        }
+        try {
+            if (timerTask != null) {
+                timerTask.cancel();
+                timerTask = null;
+            }
+        } catch (Exception e) {
+        }
+        if (initParamsThread != null)
+            initParamsThread.interrupt();
+        if (readSerialPortThread != null)
+            readSerialPortThread.interrupt();
+        if (saveDataThread != null)
+            saveDataThread.interrupt();
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
@@ -209,7 +264,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     }
 
     public void sendBytes(byte[] bytes) {
-        Log.e("www", "sendBytes " + bytes + " bytes.length" + bytes.length);
+        //Log.e("www", "sendBytes " + bytes + " bytes.length" + bytes.length);
         try {
             if (mOutputStream != null) {
                 mOutputStream.write(bytes);
@@ -298,11 +353,11 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
         int SZFDZY = Integer.decode(sp.getString("SZFDZY", "0"));
         mSZFDZY = (byte) SZFDZY;
 
-        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, mWorkMode)));
-        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, mSensitivity)));
-        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, mPower)));
-        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, mSZBZPL)));
-        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, mSZFDZY)));
+//        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, mWorkMode)));
+//        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, mSensitivity)));
+//        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, mPower)));
+//        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, mSZBZPL)));
+//        EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, mSZFDZY)));
 
         isCheckSum = sp.getString("checksum", "0").equals("校验");
     }
@@ -342,7 +397,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                 break;
             case R.id.top_time_tv:
             case R.id.top_battery:
-                startActivity(new Intent(MainActivity.this, MainMenu.class));
+                //startActivity(new Intent(MainActivity.this, MainMenu.class));
                 break;
         }
     }
@@ -489,7 +544,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
 
 
     private void saveDataPackagesToStorage(ArrayList<DataPackage> listToBeSaved) {
-        Log.e("www", "saveDataPackagesToStorage, length=" + listToBeSaved.size());
+        //Log.e("www", "saveDataPackagesToStorage, length=" + listToBeSaved.size());
         String dirName = Environment.getExternalStorageDirectory() + filePath;
         File dir = new File(dirName);
         if (!dir.exists())
@@ -541,14 +596,24 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
             case (byte) 0x80://自检结果上报 0：自检成功
                 if (Utils.getUnsignedByte(commandContent) == 0)
                     Toast.makeText(MainActivity.this, "自检成功", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(MainActivity.this, "自检失败，请重启", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x81://灵敏度设置ACK  0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
+                    isInitSensitivity = true;
                     Toast.makeText(MainActivity.this, "灵敏度设置成功", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(MainActivity.this, "灵敏度设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x82://工作模式设置ACK  0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
                     Toast.makeText(MainActivity.this, "工作模式设置成功", Toast.LENGTH_SHORT).show();
+                    isInit = true;
+                    isInitWorkMode = true;
+                } else {
+                    Toast.makeText(MainActivity.this, "工作模式设置失败", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case (byte) 0x83://读取电量上报  1-10有效，表示电量格数，10表示电量充足，3以下(包含3)提示低电量
                 if (Utils.getUnsignedByte(commandContent) <= 3)
@@ -556,33 +621,91 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                 topBattery.setPower(Utils.getUnsignedByte(commandContent) * 10);
                 break;
             case (byte) 0x85://功率设置ACK   0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
+                    isInitPower = true;
                     Toast.makeText(MainActivity.this, "功率设置成功", Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(MainActivity.this, "功率设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x86://数字本振频率设置ACK  0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
+                    isInitSZBZPL = true;
                     Toast.makeText(MainActivity.this, "数字本振频率设置成功", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(MainActivity.this, "数字本振频率设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x87://数字放大增益设置ACK  0：设置成功
-                if (Utils.getUnsignedByte(commandContent) == 0)
+                if (Utils.getUnsignedByte(commandContent) == 0) {
+                    isInitSZFDZY = true;
                     Toast.makeText(MainActivity.this, "数字放大增益设置成功", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(MainActivity.this, "数字放大增益设置失败", Toast.LENGTH_SHORT).show();
                 break;
             case (byte) 0x88://测量数据主动上报,非指令
                 break;
         }
     }
 
+    class InitParamsThread extends Thread {
+        @Override
+        public void run() {
+            while (!isInterrupted() && !isInit) {
+                if (!isInitWorkMode) {
+                    try {
+                        Thread.sleep(60);
+                    } catch (InterruptedException e) {
+                    }
+                    EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_workmode, mWorkMode)));
+                }
+                if (!isInitSensitivity) {
+                    try {
+                        Thread.sleep(60);
+                    } catch (InterruptedException e) {
+                    }
+                    EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_sensitivity, mSensitivity)));
+                }
+                if (!isInitPower) {
+                    try {
+                        Thread.sleep(60);
+                    } catch (InterruptedException e) {
+                    }
+                    EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_power, mPower)));
+                }
+                if (!isInitSZBZPL) {
+                    try {
+                        Thread.sleep(60);
+                    } catch (InterruptedException e) {
+                    }
+                    EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szbzpl, mSZBZPL)));
+                }
+                if (!isInitSZFDZY) {
+                    try {
+                        Thread.sleep(60);
+                    } catch (InterruptedException e) {
+                    }
+                    EventBus.getDefault().post(new MainActivity.sendDataEvent(DataConstants.getControlCommandBytes(DataConstants.command_send_szfdzy, mSZFDZY)));
+                }
+
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
+
     class ReadSerialPortThread extends Thread {
         @Override
         public void run() {
-            while (true) {
+            while (!isInterrupted()) {
                 try {
                     ReceivedData receivedData = receivedDataLinkedBlockingQueue.take();
                     if (receivedData.size == DataConstants.COMMAND_FRAME_LENGTH
                             && receivedData.buffer[0] == DataConstants.FRAME_HEAD
                             && receivedData.buffer[6] == DataConstants.FRAME_TAIL) { //指令帧
                         CommandPackage commandPackage = new CommandPackage((receivedData));
-                        Log.e("www", "ReadSerialPortThread  received CommandPackage..." +  " dataBytes.length" + commandPackage.dataBytes.length);
+                        //Log.e("www", "ReadSerialPortThread  received CommandPackage..." +  " dataBytes.length" + commandPackage.dataBytes.length);
                         //processCommandPackage(commandPackage);
                         EventBus.getDefault().post(new receiveCommandPackageEvent(commandPackage));
                     } else if (receivedData.size > 0 && receivedData.buffer[0] == DataConstants.FRAME_HEAD && receivedData.buffer[1] == DataConstants.command_receive_data) { //数据帧开头
@@ -595,7 +718,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                         dataLen[1] = receivedData.buffer[3];
                         int length = Utils.byteArrayToShort(dataLen, 0);
                         length = DataConstants.DATA_FRAME_LENGTH;//写死数据帧长度
-                        Log.e("www", "ReadSerialPortThread  length" +  length);
+                        //Log.e("www", "ReadSerialPortThread  length" +  length);
                         while (copyIndex < length) {//循环读取数据包后面的部分
                             ReceivedData otherReceivedData = receivedDataLinkedBlockingQueue.take();
                             System.arraycopy(otherReceivedData.buffer, 0, dataPackage.dataBytes, copyIndex, otherReceivedData.size);//复制一段数据
@@ -610,15 +733,113 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
                                 dataPackages4display.remove(0);
                             }
                             dataPackages4display.add(dataPackage);
-                            Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
+
+                            //环境噪声学习功能
+                            //if (isInit && dataPackage.getWaveType() == 0 && power3DbList.size() < 15) {
+                            if (!isThReady){
+                                if (isInit && dataPackage.getWaveType() == 0 && power3DbList.size() < 15) {
+                                    power3DbList.add(dataPackage.getWavePower());
+                                    //} else if (isInit && dataPackage.getWaveType() == 1 && power2DbList.size() < 15) {
+                                } else if (isInit && dataPackage.getWaveType() == 1 && power2DbList.size() < 15) {
+                                    power2DbList.add(dataPackage.getWavePower());
+                                }
+                                if ((power3DbList.size() >= 15) && (power2DbList.size() >= 15)) {
+                                    CopyOnWriteArrayList<Integer> list1 = (CopyOnWriteArrayList<Integer>) power3DbList.clone();
+                                    int thBase3Ref = 0;
+                                    for (int base3 : list1) {
+                                        thBase3Ref += base3;
+                                    }
+                                    thBase3Ref = thBase3Ref / list1.size() + TH_OFFSET;
+                                    if (thBase3Ref > 60)
+                                        thBase3Ref = 60;
+                                    else if (thBase3Ref < 35) {
+                                        thBase3Ref = 35;
+                                    }
+                                    TH_base3 = thBase3Ref;
+
+                                    CopyOnWriteArrayList<Integer> list2 = (CopyOnWriteArrayList<Integer>) power2DbList.clone();
+                                    int thBase2Ref = 0;
+                                    for (int base2 : list2) {
+                                        thBase2Ref += base2;
+                                    }
+                                    thBase2Ref = thBase2Ref / list2.size() + TH_OFFSET;
+                                    if (thBase2Ref > 60)
+                                        thBase2Ref = 60;
+                                    else if (thBase2Ref < 15) {
+                                        thBase2Ref = 15;
+                                    }
+                                    TH_base2 = thBase2Ref;
+
+                                    isThReady = true;
+                                }
+                            }
+                            else{
+                                if (dataPackage.getWaveType() == 0) {
+                                    power_base3_cur = dataPackage.getWavePower();
+                                    if (power3DbReshapeList.size() > maxDisplayLength + 1) {
+                                        power3DbReshapeList.remove(0);
+                                    }
+                                    if (power3DbReshapeList.size() < 1) {
+                                        power_base3_old = power_base3_cur;
+                                    }
+                                    if (power_base3_cur > power_base3_old) {
+                                        if (power_base3_old >= TH_base3)
+                                            power_base3_reshape = (power_base3_cur + power_base3_old)/2;
+                                        else
+                                            power_base3_reshape = power_base3_old;
+                                    }else
+                                    {
+                                        if(power_base3_cur >= TH_base3)
+                                            power_base3_reshape = (power_base3_cur + power_base3_old)/2;
+                                        else
+                                            power_base3_reshape = power_base3_cur;
+                                    }
+                                    power_base3_old = power_base3_cur;
+                                    power3DbReshapeList.add(power_base3_reshape);
+
+                                    if (power3DbFiltList.size() > maxDisplayLength + 1) {
+                                        power3DbFiltList.remove(0);
+                                    }
+                                    if (power3DbFiltList.size() < 1){
+                                        power_filt_base3_old = power_base3_reshape;
+                                    }
+                                    power_filt_base3_cur = 0.25f*power_base3_reshape+0.75f*power_filt_base3_old;
+                                    power_filt_base3_old = power_filt_base3_cur;
+                                    power3DbFiltList.add(power_filt_base3_cur);
+                                }
+
+                                if (dataPackage.getWaveType() == 1) {
+                                    power_base2_cur = dataPackage.getWavePower();
+                                    if (power2DbReshapeList.size() > maxDisplayLength + 1) {
+                                        power2DbReshapeList.remove(0);
+                                    }
+                                    if (power2DbReshapeList.size() < 1) {
+                                        power_base2_old = power_base2_cur;
+                                    }
+                                    power_base2_reshape = (power_base2_cur + power_base2_old)/2;
+                                    power_base2_old = power_base2_cur;
+                                    power2DbReshapeList.add(power_base2_reshape);
+
+                                    if (power2DbFiltList.size() > maxDisplayLength + 1) {
+                                        power2DbFiltList.remove(0);
+                                    }
+                                    if (power2DbFiltList.size() < 1){
+                                        power_filt_base2_old = power_base2_reshape;
+                                    }
+                                    power_filt_base2_cur = 0.25f*power_base2_reshape+0.75f*power_filt_base2_old;
+                                    power_filt_base2_old = power_filt_base2_cur;
+                                    power2DbFiltList.add(power_filt_base2_cur);
+                                }
+                            }
+                            //Log.e("www", "ReadSerialPortThread  received DataPackage..." + " dataBytes.length" + dataPackage.dataBytes.length);
                             if (alertThread != null) {
                                 int wavePower = dataPackage.getWavePower();
                                 float vol = wavePower / 100f;
                                 if (dataPackage.getWaveType() == 0) { //3次
-                                    alertThread.setVolume(vol, vol);
+                                    alertThread.setVolume(vol, 0);
                                     alertThread.addSound(4);
                                 } else if (dataPackage.getWaveType() == 1) {
-                                    alertThread.setVolume(vol, vol);
+                                    alertThread.setVolume(0, vol);
                                     alertThread.addSound(2);
                                 }
 //                                if (new Random().nextInt(10) > 5) {
@@ -646,7 +867,7 @@ public class MainActivity extends SerialPortActivity implements View.OnClickList
     class SaveDataPackToStorageThread extends Thread {
         @Override
         public void run() {
-            while (true) {
+            while (!isInterrupted()) {
                 if (dataPackageLinkedBlockingQueue.size() > datapackNumToSaveInFile) {
                     //保存到外部
                     ArrayList<DataPackage> listToBeSaved = new ArrayList<>(datapackNumToSaveInFile);

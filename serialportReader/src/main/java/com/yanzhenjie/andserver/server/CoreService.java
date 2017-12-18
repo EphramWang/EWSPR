@@ -25,6 +25,7 @@ import com.yanzhenjie.andserver.AndServer;
 import com.yanzhenjie.andserver.Server;
 import com.yanzhenjie.andserver.server.response.RequestDeleteHandler;
 import com.yanzhenjie.andserver.server.response.RequestDownloadHandler;
+import com.yanzhenjie.andserver.server.response.RequestDownloadPicHandler;
 import com.yanzhenjie.andserver.server.response.RequestFileHandler;
 import com.yanzhenjie.andserver.server.response.RequestLoginHandler;
 import com.yanzhenjie.andserver.server.response.RequestUploadHandler;
@@ -51,6 +52,7 @@ public class CoreService extends Service {
                 .timeout(10 * 1000)
                 .registerHandler("login", new RequestLoginHandler())
                 .registerHandler("files", new RequestDownloadHandler())
+                .registerHandler("pics", new RequestDownloadPicHandler())
                 .registerHandler("download", new RequestFileHandler())
                 .registerHandler("upload", new RequestUploadHandler())
                 .registerHandler("delete", new RequestDeleteHandler())

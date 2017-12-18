@@ -41,7 +41,13 @@ public class RequestDeleteHandler implements RequestHandler {
 
         } else {//is file
 
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + MainActivity.filePath + "/" + dirName + "/" + filename);
+            String fileStr;
+            if (MainActivity.screenshotPath.contains(dirName)) {
+                fileStr = Environment.getExternalStorageDirectory().getAbsolutePath() + MainActivity.screenshotPath + "/" + filename;
+            } else {
+                fileStr = Environment.getExternalStorageDirectory().getAbsolutePath() + MainActivity.filePath + "/" + dirName + "/" + filename;
+            }
+            File file = new File(fileStr);
             if (file.exists()) {
                 response.setStatusCode(200);
                 file.delete();

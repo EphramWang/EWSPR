@@ -1,5 +1,6 @@
 package android.serialport.reader.model;
 
+import android.serialport.reader.MainActivity;
 import android.serialport.reader.utils.DataConstants;
 import android.serialport.reader.utils.Utils;
 
@@ -119,6 +120,21 @@ public class DataPackage {
     public int getWavePower() {
         int int1 = Utils.byteArrayToInt(dataBytes, 12 + DATA_START);
         return (int) (10 * Math.log10(int1) - OFFSET);
+    }
+
+    public int getWavePowerRegulated() {
+        //int power = getWavePower();
+        //int power = getWaveType() == 0 ? MainActivity.power_base3_reshape : MainActivity.power_base2_reshape;
+        int power = getWaveType() == 0 ? (int)MainActivity.power_filt_base3_cur : (int)MainActivity.power_filt_base2_cur;
+        int thBase = getWaveType() == 0 ? MainActivity.TH_base3 : MainActivity.TH_base2;
+        float gain = getWaveType() == 0 ? MainActivity.Gain3 : MainActivity.Gain2;
+        power = (int) (4 * (power - thBase) * gain + 10);
+        if (power < 5)
+            power = 5;
+        else if (power > 100)
+            power = 100;
+        power = 5 * (int) ((power + 2.5f) / 5);
+        return power;
     }
 
     /**
